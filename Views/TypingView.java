@@ -1,13 +1,23 @@
 package Views;
 
-public class TypingView extends View{
-    @Override
-    public void initUI() {
+public class TypingView{
+
+    public TypingView(){
 
     }
 
-    @Override
-    public void drawScreen() {
+    private void initUI() {
+    }
+
+
+    private void drawScreen() {
 
     }
+
+
+    private void updateScreen() {
+
+    }
+
+
 }

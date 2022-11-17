@@ -3,15 +3,17 @@ package Views;
 import javafx.scene.canvas.Canvas;
 import javafx.stage.Stage;
 import javafx.scene.canvas.GraphicsContext;
-abstract class View {
+abstract class View { // ABSTRACT CLASS IS POINTLESS
     Stage stage;
     GraphicsContext gc;
     Canvas canvas;
     //Controller controller;
 
-    public abstract void initUI();
+    abstract void initUI();
 
-    public abstract void drawScreen();
+    abstract void drawScreen();
+
+    abstract void updateScreen();
 
 }
 
