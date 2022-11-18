@@ -26,12 +26,20 @@ public class TypingView{
 
     Canvas canvas;
     GraphicsContext gc;
+
+    Font font;
+
+    //The font size and style for the Drawn Text Prompts
+    private int defaultFontSize = 36;
+    private String defaultFontStyle = "Arial";
     public TypingView(Stage stage){
         this.stage = stage;
         initUI();
     }
 
     private void initUI() {
+        font = new Font(defaultFontStyle, defaultFontSize);
+
         borderPane = new BorderPane();
         borderPane.setStyle("-fx-background-color: #778899;");
 
@@ -62,7 +70,7 @@ public class TypingView{
         borderPane.setCenter(canvas);
         borderPane.setBottom(controls);
 
-        timeline = new Timeline(new KeyFrame(Duration.seconds(0.25), e->drawScreen()));
+        timeline = new Timeline(new KeyFrame(Duration.seconds(0.001), e->drawScreen()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
 
@@ -72,13 +80,19 @@ public class TypingView{
     }
 
     private void drawScreen() {
-        String temp = "The quick brown fox jumped over the lazy doggy The quick brown fox jumped over the lazy doggy The quick brown fox jumped over the lazy doggy The quick brown fox jumped over the lazy doggy The quick brown fox jumped over the lazy doggy"; //replace with phrase from teh model
+        //replace with phrase from the model
+        String temp = "The quick brown fox jumped over the lazy doggy The quick brown fox jumped over the lazy doggy " +
+                "The quick brown fox jumped over the lazy doggy The quick brown fox jumped " +
+                "over the lazy doggy The quick brown fox jumped over the lazy doggy";
 
+        //Setting the text colour, alignment, and font
         gc.setStroke(Color.WHITE);
         gc.setFill(Color.WHITE);
-        gc.setFont(new Font(36));
-        gc.setTextAlign(TextAlignment.CENTER);
+        gc.setFont(font);
+        gc.setTextAlign(TextAlignment.LEFT);
 
+
+        // The coordinates for where to draw the text, these are the default values.
         int currX = 20;
         int currY = 30;
 
@@ -87,12 +101,15 @@ public class TypingView{
              currChar = temp.charAt(ind);
             if(!Character.toString(currChar).equals(" ")) {
                 Text text = new Text(Character.toString(currChar));
-                int dx = (int) Math.floor(text.getLayoutBounds().getWidth());
+                text.setFont(font);
+                int dx = (int) Math.ceil(text.getLayoutBounds().getWidth()); //the width of the text to be printed
 
+                //Drawing the current character
                 gc.fillText(Character.toString(currChar), currX, currY);
 
+                //To handle text wrapping.
                 if (currX + dx + 14 + 10 < canvas.getWidth()){
-                    currX = currX + dx + 14;
+                    currX = currX + dx;
                 }
                 else{
                     currX = 20;
@@ -100,7 +117,7 @@ public class TypingView{
                 }
             }
             else {
-                currX = currX + 8;
+                currX = currX + 12;
             }
         }
     }
