@@ -1,6 +1,9 @@
 package Model;
 
-public class PhraseCorrectness {
+import java.util.ArrayList;
+import java.util.List;
+
+public class PhraseCorrectness implements Observable{
     // The current phrase being compared against
     private String phrase;
 
@@ -12,6 +15,10 @@ public class PhraseCorrectness {
 
     // Current state of the phrase
     private PhraseState phraseState;
+
+    // List of observers
+    private List<Observer> observers = new ArrayList<>();
+
 
     public PhraseCorrectness(String s) {
         // init attributes
@@ -41,6 +48,7 @@ public class PhraseCorrectness {
         correctness = new boolean[s.length()];
         cursorPos = 0;
         updatePhraseState();
+        notifyObservers();
     }
 
     /**
@@ -51,6 +59,7 @@ public class PhraseCorrectness {
         correctness[cursorPos] = (phrase.charAt(cursorPos) == c);
         cursorPos++;
         updatePhraseState();
+        notifyObservers();
     }
 
     /**
@@ -59,6 +68,7 @@ public class PhraseCorrectness {
     public void removeCharacter(){
         cursorPos--;
         updatePhraseState();
+        notifyObservers();
     }
 
     /**
@@ -72,4 +82,19 @@ public class PhraseCorrectness {
     }
 
     public PhraseState getPhraseState(){ return phraseState; }
+
+    @Override
+    public void register(Observer o) {
+        if(!observers.contains(o)) observers.add(o);
+    }
+
+    @Override
+    public void unRegister(Observer o) { observers.remove(o); }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer o: observers) {
+            o.update(phraseState);
+        }
+    }
 }
