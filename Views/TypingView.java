@@ -79,7 +79,7 @@ public class TypingView extends View implements Observer<PhraseState> {
         borderPane.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
-                String code = keyEvent.getCode().getChar();
+                String code = keyEvent.getText();
                 if(code.length() == 1){
                     control.handleKeystroke();
                 }
