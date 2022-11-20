@@ -4,11 +4,13 @@ import Model.PhraseState;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -19,19 +21,17 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class TypingView{
+public class TypingView extends View{
     Stage stage;
     BorderPane borderPane;
     Button startButton, nextButton;
 
     Timeline timeline;
-
-    Canvas canvas;
-    GraphicsContext gc;
-
     Font font;
 
     PhraseState state;
+
+    Color[] textPallette = {Color.WHITE, Color.GRAY, Color.RED}; // {correct, to be typed, Incorrect}
 
     //The font size and style for the Drawn Text Prompts
     private int defaultFontSize = 36;
@@ -71,6 +71,14 @@ public class TypingView{
         canvas.setId("Canvas");
         gc = canvas.getGraphicsContext2D();
 
+        borderPane.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                String code = keyEvent.getCode().getChar();
+
+            }
+        });
+
         // Positioning of various UI elements
         borderPane.setCenter(canvas);
         borderPane.setBottom(controls);
@@ -79,9 +87,7 @@ public class TypingView{
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
 
-        Scene scene = new Scene(borderPane, 950, 650);
-        this.stage.setScene(scene);
-        this.stage.show();
+        scene = new Scene(borderPane, 950, 650);
     }
 
     private void drawScreen() {
@@ -111,14 +117,14 @@ public class TypingView{
 
                 if(ind < cursor){
                     if (phraseBool[ind]){
-                        gc.setFill(Color.GREEN);
+                        gc.setFill(textPallette[0]);
                     }
                     else{
-                        gc.setFill(Color.RED);
+                        gc.setFill(textPallette[2]);
                     }
                 }
                 else {
-                    gc.setFill(Color.WHITE);
+                    gc.setFill(textPallette[1]);
                 }
                 //Drawing the current character
                 gc.fillText(Character.toString(currChar), currX, currY);
@@ -140,9 +146,5 @@ public class TypingView{
     }
 
 
-    private void updateScreen() {
-
-    }
-
-
+    private void updateScreen() {throw new UnsupportedOperationException();}
 }
