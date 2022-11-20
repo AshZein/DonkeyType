@@ -120,6 +120,7 @@ public class TypingView{
                 currX = currX + 12;
             }
         }
+       gc.clip();
     }
 
 
