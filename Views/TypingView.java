@@ -4,7 +4,6 @@ import Controller.Controller;
 import Model.Observer;
 import Model.PhraseState;
 
-import com.sun.webkit.graphics.WCGraphicsContext;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
@@ -12,7 +11,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -25,21 +23,24 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class TypingView extends View implements Observer<PhraseState> {
-    Stage stage;
     BorderPane borderPane;
     Button startButton, nextButton;
-
     Timeline timeline;
     Font font;
-
     PhraseState state;
-
     Color[] textPallette = {Color.WHITE, Color.GRAY, Color.RED}; // {correct, to be typed, Incorrect}
 
 
     //The font size and style for the Drawn Text Prompts
     private int defaultFontSize = 36;
     private String defaultFontStyle = "Arial";
+
+    // Visual Cursor stuff
+    private int cursorX = 20;
+    private int cursorY;
+
+    Color cursorCol = Color.GRAY;
+
     public TypingView(Controller control){
         super(control);
         initUI();
@@ -117,53 +118,70 @@ public class TypingView extends View implements Observer<PhraseState> {
         // The coordinates for where to draw the text, these are the default values.
         int currX = 20;
         int currY = 30;
-
+        cursorY = currY + 6;
         char currChar;
 
         String phrase = this.state.getPhrase();
         boolean[] phraseBool = this.state.getCorrectness();
         int cursor = this.state.getCursorPos();
 
+        gc.clearRect(cursorX, cursorY - this.font.getSize(), 2, this.font.getSize());
+
         for(int ind = 0; ind < phrase.length(); ind++){
-             currChar = phrase.charAt(ind);
-            if(!Character.toString(currChar).equals(" ")) {
-                Text text = new Text(Character.toString(currChar));
-                text.setFont(font);
-                int dx = (int) Math.ceil(text.getLayoutBounds().getWidth()); //the width of the text to be printed
+            currChar = phrase.charAt(ind);
 
-                if(ind < cursor){
-                    if (phraseBool[ind]){ // Text typed correctly
-                        gc.setFill(textPallette[0]);
-                    }
-                    else{ //Text typed incorrectly
-                        gc.setFill(textPallette[2]);
-                    }
-                }
-                else { // Text which still needs to be typed
-                    gc.setFill(textPallette[1]);
-                }
-                //Drawing the current character
-                gc.fillText(Character.toString(currChar), currX, currY);
+            Text text = new Text(Character.toString(currChar));
+            text.setFont(font);
+            int dx = (int) Math.ceil(text.getLayoutBounds().getWidth()); //the width of the text to be printed
 
-                //To handle text wrapping.
-                if (currX + dx + 14 + 10 < canvas.getWidth()){
-                    currX = currX + dx;
+
+
+            //Setting the character colour.
+            if(ind < cursor){
+                if (phraseBool[ind]){ // Text typed correctly
+                    gc.setFill(textPallette[0]);
+                    //this.cursorX = currX + dx;
                 }
-                else{ // moving to the next line
-                    currX = 20;
-                    currY = currY + 45;
+                else{ //Text typed incorrectly
+                    gc.setFill(textPallette[2]);
+                    //this.cursorX = currX + dx;
                 }
             }
-            else { // a space
-                currX = currX + 12;
+            else { // Text which still needs to be typed
+                gc.setFill(textPallette[1]);
+            }
+            //Drawing the current character
+            gc.fillText(Character.toString(currChar), currX, currY);
+
+            // Sets where to draw a visual cursor
+            if (ind == cursor){
+                cursorX = currX;
+            }
+
+            //To handle text wrapping.
+            if (currX + dx + 14 + 10 < canvas.getWidth()){
+                currX = currX + dx;
+            }
+            else{ // moving to the next line
+                currX = 20;
+                currY = currY + 45;
+                this.cursorY = currY;
             }
         }
     }
 
+    /*
+     * Draws a cursor at the point where the user has typed up to.
+     */
+    private void drawCursor(){
+        gc.setFill(cursorCol);
+        gc.fillRect(cursorX, cursorY - this.font.getSize(), 2, this.font.getSize());
+    }
 
     private void updateScreen() {
         if(!(this.state == null)){
             this.drawScreen();
+            this.drawCursor();
         }
     }
 }
