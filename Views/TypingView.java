@@ -85,6 +85,9 @@ public class TypingView extends View implements Observer<PhraseState> {
                 if(keyEvent.getCode().toString().equals("BACK_SPACE")){
                     control.handleKeystroke("backspace");
                 }
+                else if(keyEvent.isShiftDown()){
+                    control.handleKeystroke(keyEvent.getText().toUpperCase());
+                }
                 else if(code.length() == 1){
                     control.handleKeystroke(keyEvent.getText());
                 }
@@ -120,6 +123,7 @@ public class TypingView extends View implements Observer<PhraseState> {
         String phrase = this.state.getPhrase();
         boolean[] phraseBool = this.state.getCorrectness();
         int cursor = this.state.getCursorPos();
+
         for(int ind = 0; ind < phrase.length(); ind++){
              currChar = phrase.charAt(ind);
             if(!Character.toString(currChar).equals(" ")) {
