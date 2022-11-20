@@ -4,6 +4,7 @@ import Controller.Controller;
 import Model.Observer;
 import Model.PhraseState;
 
+import com.sun.webkit.graphics.WCGraphicsContext;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
@@ -96,7 +97,7 @@ public class TypingView extends View implements Observer<PhraseState> {
         borderPane.setCenter(canvas);
         borderPane.setBottom(controls);
 
-        timeline = new Timeline(new KeyFrame(Duration.seconds(0.001), e->drawScreen()));
+        timeline = new Timeline(new KeyFrame(Duration.seconds(0.001), e->updateScreen()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
 
@@ -153,9 +154,12 @@ public class TypingView extends View implements Observer<PhraseState> {
                 currX = currX + 12;
             }
         }
-       gc.clip();
     }
 
 
-    private void updateScreen() {throw new UnsupportedOperationException();}
+    private void updateScreen() {
+        if(!(this.state == null)){
+            this.drawScreen();
+        }
+    }
 }
