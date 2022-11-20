@@ -87,6 +87,7 @@ public class TypingView extends View implements Observer<PhraseState> {
                 else if(code.length() == 1){
                     control.handleKeystroke(keyEvent.getText());
                 }
+                borderPane.requestFocus();
 
             }
         });
