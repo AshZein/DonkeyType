@@ -28,14 +28,17 @@ public class Controller {
     public Controller(Stage stage) {
         typingView = new TypingView(this);
         String tempPhrase = "The quick brown fox jumps over the lazy dog";
+
         correctness = new PhraseCorrectness(tempPhrase);
         correctness.register(typingView);
         correctness.setPhrase(tempPhrase);  // Force call update
         currentView = typingView;   // Default view
         gameStarted = false;
+
         this.stage = stage;
-        stage.setScene(currentView.getScene());
-        stage.show();
+        this.stage.setTitle("DonkeyType");
+        this.stage.setScene(currentView.getScene());
+        this.stage.show();
     }
 
     public void setTheme(Theme theme) {
