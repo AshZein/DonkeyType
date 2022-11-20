@@ -51,7 +51,7 @@ public class TypingView extends View implements Observer<PhraseState> {
         font = new Font(defaultFontStyle, defaultFontSize);
 
         borderPane = new BorderPane();
-        borderPane.setStyle("-fx-background-color: #778899;");
+        borderPane.setStyle("-fx-background-color: #a9a9a9;");
 
         //Buttons
         startButton = new Button("Start Test");
