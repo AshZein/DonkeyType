@@ -50,7 +50,7 @@ public class Controller {
         throw new UnsupportedOperationException();
     }
 
-    public void handleKeystroke() {
+    public void handleKeystroke(String input) {
         throw new UnsupportedOperationException();
     }
 

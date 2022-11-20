@@ -81,7 +81,7 @@ public class TypingView extends View implements Observer<PhraseState> {
             public void handle(KeyEvent keyEvent) {
                 String code = keyEvent.getText();
                 if(code.length() == 1){
-                    control.handleKeystroke();
+                    control.handleKeystroke(keyEvent.getText());
                 }
 
             }
