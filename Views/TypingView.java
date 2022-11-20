@@ -124,14 +124,14 @@ public class TypingView extends View implements Observer<PhraseState> {
                 int dx = (int) Math.ceil(text.getLayoutBounds().getWidth()); //the width of the text to be printed
 
                 if(ind < cursor){
-                    if (phraseBool[ind]){
+                    if (phraseBool[ind]){ // Text typed correctly
                         gc.setFill(textPallette[0]);
                     }
-                    else{
+                    else{ //Text typed incorrectly
                         gc.setFill(textPallette[2]);
                     }
                 }
-                else {
+                else { // Text which still needs to be typed
                     gc.setFill(textPallette[1]);
                 }
                 //Drawing the current character
@@ -141,12 +141,12 @@ public class TypingView extends View implements Observer<PhraseState> {
                 if (currX + dx + 14 + 10 < canvas.getWidth()){
                     currX = currX + dx;
                 }
-                else{
+                else{ // moving to the next line
                     currX = 20;
                     currY = currY + 45;
                 }
             }
-            else {
+            else { // a space
                 currX = currX + 12;
             }
         }
