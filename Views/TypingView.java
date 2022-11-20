@@ -35,6 +35,7 @@ public class TypingView extends View implements Observer<PhraseState> {
 
     Color[] textPallette = {Color.WHITE, Color.GRAY, Color.RED}; // {correct, to be typed, Incorrect}
 
+
     //The font size and style for the Drawn Text Prompts
     private int defaultFontSize = 36;
     private String defaultFontStyle = "Arial";
@@ -80,7 +81,10 @@ public class TypingView extends View implements Observer<PhraseState> {
             @Override
             public void handle(KeyEvent keyEvent) {
                 String code = keyEvent.getText();
-                if(code.length() == 1){
+                if(keyEvent.getCode().toString().equals("BACK_SPACE")){
+                    control.handleKeystroke("backspace");
+                }
+                else if(code.length() == 1){
                     control.handleKeystroke(keyEvent.getText());
                 }
 
