@@ -56,6 +56,7 @@ public class PhraseCorrectness implements Observable<PhraseState>{
      * @param c character that will be compared to the corresponding one in 'phrase'
      */
     public void addCharacter(char c){
+        if(cursorPos >= phrase.length()) return;
         correctness[cursorPos] = (phrase.charAt(cursorPos) == c);
         cursorPos++;
         updatePhraseState();
@@ -66,9 +67,11 @@ public class PhraseCorrectness implements Observable<PhraseState>{
      * Forget that the last character has been typed
      */
     public void removeCharacter(){
-        cursorPos--;
-        updatePhraseState();
-        notifyObservers();
+        if(cursorPos > 0) {
+            cursorPos--;
+            updatePhraseState();
+            notifyObservers();
+        }
     }
 
     /**

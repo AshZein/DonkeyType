@@ -63,7 +63,4 @@ public class PhraseCorrectnessTests {
 
         assertEquals(3, ps.getCursorPos());
     }
-
-
-
 }
