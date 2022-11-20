@@ -1,6 +1,7 @@
 package Views;
 
 import Controller.Controller;
+import Model.Observer;
 import Model.PhraseState;
 
 import javafx.animation.KeyFrame;
@@ -22,7 +23,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class TypingView extends View{
+public class TypingView extends View implements Observer<PhraseState> {
     Stage stage;
     BorderPane borderPane;
     Button startButton, nextButton;
@@ -40,6 +41,10 @@ public class TypingView extends View{
     public TypingView(Controller control){
         super(control);
         initUI();
+    }
+
+    public void update(PhraseState state) {
+        this.state = state;
     }
 
     private void initUI() {
