@@ -21,16 +21,12 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class TypingView{
+public class TypingView extends View{
     Stage stage;
     BorderPane borderPane;
     Button startButton, nextButton;
 
     Timeline timeline;
-
-    Canvas canvas;
-    GraphicsContext gc;
-    Scene scene;
     Font font;
 
     PhraseState state;
@@ -150,12 +146,5 @@ public class TypingView{
     }
 
 
-    private void updateScreen() {
-
-    }
-
-    public Scene getScene(){
-        return this.scene;
-    }
-
+    private void updateScreen() {throw new UnsupportedOperationException();}
 }
