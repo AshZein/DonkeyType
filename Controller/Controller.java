@@ -22,6 +22,7 @@ public class Controller {
     View otherView;
     TypingView typingView;
     PhraseCorrectness correctness;
+    boolean gameStarted;
 
     public Controller(Stage stage) {
         typingView = new TypingView(this);
@@ -30,6 +31,7 @@ public class Controller {
         correctness.register(typingView);
         correctness.setPhrase(tempPhrase);  // Force call update
         currentView = typingView;   // Default view
+        gameStarted = false;
         stage.setScene(currentView.getScene());
         stage.show();
     }
@@ -60,6 +62,10 @@ public class Controller {
 
     private void switchView(Views view) {
         throw new UnsupportedOperationException();
+    }
+
+    public boolean isGameStarted() {
+        return gameStarted;
     }
 
 }
