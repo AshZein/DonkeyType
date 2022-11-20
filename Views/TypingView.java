@@ -22,17 +22,18 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.util.HashMap;
+
 public class TypingView extends View{
     Stage stage;
     BorderPane borderPane;
     Button startButton, nextButton;
-
     Timeline timeline;
     Font font;
-
     PhraseState state;
-
     Color[] textPallette = {Color.WHITE, Color.GRAY, Color.RED}; // {correct, to be typed, Incorrect}
+
+    HashMap<String,String> numSymbols = new HashMap<>();
 
     //The font size and style for the Drawn Text Prompts
     private int defaultFontSize = 36;
@@ -74,7 +75,7 @@ public class TypingView extends View{
         borderPane.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
-                String code = keyEvent.getCode().getChar();
+                String code = keyEvent.getText();
                 if(code.length() == 1){
                     control.handleKeystroke();
                 }
