@@ -4,11 +4,13 @@ import Model.PhraseState;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -28,7 +30,7 @@ public class TypingView{
 
     Canvas canvas;
     GraphicsContext gc;
-
+    Scene scene;
     Font font;
 
     PhraseState state;
@@ -73,6 +75,14 @@ public class TypingView{
         canvas.setId("Canvas");
         gc = canvas.getGraphicsContext2D();
 
+        borderPane.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                String code = keyEvent.getCode().getChar();
+
+            }
+        });
+
         // Positioning of various UI elements
         borderPane.setCenter(canvas);
         borderPane.setBottom(controls);
@@ -81,9 +91,7 @@ public class TypingView{
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
 
-        Scene scene = new Scene(borderPane, 950, 650);
-        this.stage.setScene(scene);
-        this.stage.show();
+        scene = new Scene(borderPane, 950, 650);
     }
 
     private void drawScreen() {
@@ -146,5 +154,8 @@ public class TypingView{
 
     }
 
+    public Scene getScene(){
+        return this.scene;
+    }
 
 }
