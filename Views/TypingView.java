@@ -91,7 +91,7 @@ public class TypingView extends View implements Observer<PhraseState> {
         borderPane.setCenter(canvas);
         borderPane.setBottom(controls);
 
-        timeline = new Timeline(new KeyFrame(Duration.seconds(0.001), e->updateScreen()));
+        timeline = new Timeline(new KeyFrame(Duration.seconds(0.001), e->drawScreen()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
 
@@ -154,9 +154,5 @@ public class TypingView extends View implements Observer<PhraseState> {
     }
 
 
-    private void updateScreen() {
-        if(!(this.state == null)){
-            this.drawScreen();
-        }
-    }
+    private void updateScreen() {throw new UnsupportedOperationException();}
 }
