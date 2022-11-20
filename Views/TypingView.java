@@ -1,6 +1,7 @@
 package Views;
 
 import Controller.Controller;
+import Model.Observer;
 import Model.PhraseState;
 
 import javafx.animation.KeyFrame;
@@ -22,18 +23,17 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.util.HashMap;
-
-public class TypingView extends View{
+public class TypingView extends View implements Observer<PhraseState> {
     Stage stage;
     BorderPane borderPane;
     Button startButton, nextButton;
+
     Timeline timeline;
     Font font;
-    PhraseState state;
-    Color[] textPallette = {Color.WHITE, Color.GRAY, Color.RED}; // {correct, to be typed, Incorrect}
 
-    HashMap<String,String> numSymbols = new HashMap<>();
+    PhraseState state;
+
+    Color[] textPallette = {Color.WHITE, Color.GRAY, Color.RED}; // {correct, to be typed, Incorrect}
 
     //The font size and style for the Drawn Text Prompts
     private int defaultFontSize = 36;
@@ -41,6 +41,10 @@ public class TypingView extends View{
     public TypingView(Controller control){
         super(control);
         initUI();
+    }
+
+    public void update(PhraseState state) {
+        this.state = state;
     }
 
     private void initUI() {
