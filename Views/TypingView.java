@@ -99,9 +99,6 @@ public class TypingView extends View implements Observer<PhraseState> {
     }
 
     private void drawScreen() {
-        //replace with phrase from the model
-        String temp = "the quick";
-
         //Setting the text colour, alignment, and font
         gc.setFill(Color.WHITE);
         gc.setFont(font);
@@ -114,10 +111,11 @@ public class TypingView extends View implements Observer<PhraseState> {
 
         char currChar;
 
+        String phrase = this.state.getPhrase();
         boolean[] phraseBool = this.state.getCorrectness();
         int cursor = this.state.getCursorPos();
-        for(int ind = 0; ind < temp.length(); ind++){
-             currChar = temp.charAt(ind);
+        for(int ind = 0; ind < phrase.length(); ind++){
+             currChar = phrase.charAt(ind);
             if(!Character.toString(currChar).equals(" ")) {
                 Text text = new Text(Character.toString(currChar));
                 text.setFont(font);
