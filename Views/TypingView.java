@@ -19,16 +19,20 @@ import javafx.scene.text.Font;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class TypingView extends View implements Observer<PhraseState> {
     BorderPane borderPane;
     Button startButton, nextButton;
+    String[] buttonColor0 = {"#121212", "#ffffff"}; // buttonColor set 0, {Button fill colour, button text colour"}
+
     Timeline timeline;
     Font font;
     PhraseState state;
     Color[] textPallette = {Color.WHITE, Color.GRAY, Color.RED}; // {correct, to be typed, Incorrect}
+
+    // The UI background colour
+    String UIColor = "#a9a9a9";
 
 
     //The font size and style for the Drawn Text Prompts
@@ -54,20 +58,20 @@ public class TypingView extends View implements Observer<PhraseState> {
         font = new Font(defaultFontStyle, defaultFontSize);
 
         borderPane = new BorderPane();
-        borderPane.setStyle("-fx-background-color: #a9a9a9;");
+        borderPane.setStyle("-fx-background-color: " + UIColor + ";");
 
         //Buttons
         startButton = new Button("Start Test");
         startButton.setId("Start Test");
         startButton.setPrefSize(100, 40);
         startButton.setFont(new Font(12));
-        startButton.setStyle("-fx-background-color: #121212; -fx-text-fill: #ffffff;");
+        startButton.setStyle("-fx-background-color:" + buttonColor0[0]+ "; -fx-text-fill: " +buttonColor0[1]+ ";");
 
         nextButton = new Button("Next Test");
         nextButton.setId("Next Test");
         nextButton.setPrefSize(100, 40);
         nextButton.setFont(new Font (12));
-        nextButton.setStyle("-fx-background-color: #121212; -fx-text-fill: #ffffff;");
+        nextButton.setStyle("-fx-background-color:" + buttonColor0[0]+ "; -fx-text-fill: " +buttonColor0[1]+ ";");
 
         // button spacing and positioning
         HBox controls = new HBox(40, startButton, nextButton);
@@ -171,7 +175,7 @@ public class TypingView extends View implements Observer<PhraseState> {
     }
 
     /*
-     * Draws a cursor at the point where the user has typed up to.
+     * Draws a cursor in the UI at the point where the user has typed up to.
      */
     private void drawCursor(){
         gc.setFill(cursorCol);
