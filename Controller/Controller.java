@@ -33,6 +33,7 @@ public class Controller {
         correctness.setPhrase(tempPhrase);  // Force call update
         currentView = typingView;   // Default view
         gameStarted = false;
+        this.stage = stage;
         stage.setScene(currentView.getScene());
         stage.show();
     }
