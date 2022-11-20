@@ -31,6 +31,7 @@ public class Controller {
         correctness.register(typingView);
         currentView = typingView;   // Default view
         stage.setScene(currentView.getScene());
+        stage.show();
     }
 
     public void setTheme(Theme theme) {
