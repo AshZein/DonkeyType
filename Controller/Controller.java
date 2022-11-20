@@ -23,6 +23,7 @@ public class Controller {
     TypingView typingView;
     PhraseCorrectness correctness;
     boolean gameStarted;
+    double gameStartTime;
 
     public Controller(Stage stage) {
         typingView = new TypingView(this);
@@ -53,7 +54,13 @@ public class Controller {
     }
 
     public void handleKeystroke(String input) {
-        throw new UnsupportedOperationException();
+        if (!gameStarted) {
+            gameStarted = true;
+            gameStartTime = System.nanoTime();
+        }
+        
+        if (input.equals("backspace")) correctness.removeCharacter();
+        else correctness.addCharacter(input.charAt(0));
     }
 
     private void gameTick() {
