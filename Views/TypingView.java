@@ -33,6 +33,8 @@ public class TypingView{
 
     PhraseState state;
 
+    Color[] textPallette = {Color.WHITE, Color.GRAY, Color.RED}; // {correct, to be typed, Incorrect}
+
     //The font size and style for the Drawn Text Prompts
     private int defaultFontSize = 36;
     private String defaultFontStyle = "Arial";
@@ -111,14 +113,14 @@ public class TypingView{
 
                 if(ind < cursor){
                     if (phraseBool[ind]){
-                        gc.setFill(Color.GREEN);
+                        gc.setFill(textPallette[0]);
                     }
                     else{
-                        gc.setFill(Color.RED);
+                        gc.setFill(textPallette[2]);
                     }
                 }
                 else {
-                    gc.setFill(Color.WHITE);
+                    gc.setFill(textPallette[1]);
                 }
                 //Drawing the current character
                 gc.fillText(Character.toString(currChar), currX, currY);
