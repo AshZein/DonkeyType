@@ -1,5 +1,7 @@
 package Views;
 
+import Model.PhraseState;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
@@ -29,10 +31,13 @@ public class TypingView{
 
     Font font;
 
+    PhraseState state;
+
     //The font size and style for the Drawn Text Prompts
     private int defaultFontSize = 36;
     private String defaultFontStyle = "Arial";
-    public TypingView(Stage stage){
+    public TypingView(Stage stage, PhraseState state){
+        this.state = state;
         this.stage = stage;
         initUI();
     }
@@ -81,12 +86,9 @@ public class TypingView{
 
     private void drawScreen() {
         //replace with phrase from the model
-        String temp = "The quick brown fox jumped over the lazy doggy The quick brown fox jumped over the lazy doggy " +
-                "The quick brown fox jumped over the lazy doggy The quick brown fox jumped " +
-                "over the lazy doggy The quick brown fox jumped over the lazy doggy";
+        String temp = "the quick";
 
         //Setting the text colour, alignment, and font
-        gc.setStroke(Color.WHITE);
         gc.setFill(Color.WHITE);
         gc.setFont(font);
         gc.setTextAlign(TextAlignment.LEFT);
@@ -97,6 +99,9 @@ public class TypingView{
         int currY = 30;
 
         char currChar;
+
+        boolean[] phraseBool = this.state.getCorrectness();
+        int cursor = this.state.getCursorPos();
         for(int ind = 0; ind < temp.length(); ind++){
              currChar = temp.charAt(ind);
             if(!Character.toString(currChar).equals(" ")) {
@@ -104,6 +109,17 @@ public class TypingView{
                 text.setFont(font);
                 int dx = (int) Math.ceil(text.getLayoutBounds().getWidth()); //the width of the text to be printed
 
+                if(ind < cursor){
+                    if (phraseBool[ind]){
+                        gc.setFill(Color.GREEN);
+                    }
+                    else{
+                        gc.setFill(Color.RED);
+                    }
+                }
+                else {
+                    gc.setFill(Color.WHITE);
+                }
                 //Drawing the current character
                 gc.fillText(Character.toString(currChar), currX, currY);
 

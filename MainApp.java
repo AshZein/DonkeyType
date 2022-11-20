@@ -1,3 +1,4 @@
+import Model.PhraseState;
 import Views.TypingView;
 
 import javafx.application.Application;
@@ -15,7 +16,9 @@ public class MainApp extends Application{
 
     @Override
     public void start(Stage pStage) throws Exception {
-        this.view = new TypingView(pStage);
+        PhraseState phraseState = new PhraseState();
+        this.view = new TypingView(pStage, phraseState);
+
     }
 
     /**
