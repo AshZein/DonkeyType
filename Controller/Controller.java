@@ -27,8 +27,8 @@ public class Controller {
         typingView = new TypingView(this);
         String tempPhrase = "The quick brown fox jumps over the lazy dog";
         correctness = new PhraseCorrectness(tempPhrase);
-        correctness.setPhrase(tempPhrase);  // Force call update
         correctness.register(typingView);
+        correctness.setPhrase(tempPhrase);  // Force call update
         currentView = typingView;   // Default view
         stage.setScene(currentView.getScene());
     }
