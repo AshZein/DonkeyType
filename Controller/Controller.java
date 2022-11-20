@@ -1,7 +1,9 @@
 package Controller;
 
+import Model.PhraseCorrectness;
 import Views.TypingView;
 import Views.View;
+import javafx.stage.Stage;
 
 enum Theme {
     NORMAL,
@@ -15,12 +17,18 @@ enum Views {
 }
 
 public class Controller {
+    Stage stage;
     View currentView;
     View otherView;
     TypingView typingView;
+    PhraseCorrectness correctness;
 
-    public Controller() {
-        throw new UnsupportedOperationException();
+    public Controller(Stage stage) {
+        typingView = new TypingView(this);
+        correctness = new PhraseCorrectness("The quick brown fox jumps over the lazy dog");
+        correctness.register(typingView);
+        currentView = typingView;   // Default view
+        stage.setScene(currentView.getScene());
     }
 
     public void setTheme(Theme theme) {
