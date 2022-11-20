@@ -1,5 +1,6 @@
 package Views;
 
+import Controller.Controller;
 import Model.PhraseState;
 
 import javafx.animation.KeyFrame;
@@ -36,9 +37,8 @@ public class TypingView extends View{
     //The font size and style for the Drawn Text Prompts
     private int defaultFontSize = 36;
     private String defaultFontStyle = "Arial";
-    public TypingView(Stage stage, PhraseState state){
-        this.state = state;
-        this.stage = stage;
+    public TypingView(Controller control){
+        super(control);
         initUI();
     }
 
@@ -75,6 +75,9 @@ public class TypingView extends View{
             @Override
             public void handle(KeyEvent keyEvent) {
                 String code = keyEvent.getCode().getChar();
+                if(code.length() == 1){
+                    control.handleKeystroke();
+                }
 
             }
         });
