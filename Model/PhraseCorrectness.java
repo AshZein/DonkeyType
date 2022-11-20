@@ -3,7 +3,7 @@ package Model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PhraseCorrectness implements Observable{
+public class PhraseCorrectness implements Observable<PhraseState>{
     // The current phrase being compared against
     private String phrase;
 
@@ -17,7 +17,7 @@ public class PhraseCorrectness implements Observable{
     private PhraseState phraseState;
 
     // List of observers
-    private List<Observer> observers = new ArrayList<>();
+    private List<Observer<PhraseState>> observers = new ArrayList<>();
 
 
     public PhraseCorrectness(String s) {
@@ -84,16 +84,16 @@ public class PhraseCorrectness implements Observable{
     public PhraseState getPhraseState(){ return phraseState; }
 
     @Override
-    public void register(Observer o) {
+    public void register(Observer<PhraseState> o) {
         if(!observers.contains(o)) observers.add(o);
     }
 
     @Override
-    public void unRegister(Observer o) { observers.remove(o); }
+    public void unRegister(Observer<PhraseState> o) { observers.remove(o); }
 
     @Override
     public void notifyObservers() {
-        for (Observer o: observers) {
+        for (Observer<PhraseState> o: observers) {
             o.update(phraseState);
         }
     }

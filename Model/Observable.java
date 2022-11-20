@@ -1,10 +1,10 @@
 package Model;
 
-public interface Observable {
+public interface Observable<T> {
 
-    public void register(Observer o);
+    public void register(Observer<T> o);
 
-    public void unRegister(Observer o);
+    public void unRegister(Observer<T> o);
 
     public void notifyObservers();
 }

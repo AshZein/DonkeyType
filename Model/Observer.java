@@ -1,6 +1,6 @@
 package Model;
 
-public interface Observer {
+public interface Observer<T> {
 
-    public void update(Object o);
+    public void update(T state);
 }
