@@ -24,7 +24,7 @@ import javafx.util.Duration;
 public class TypingView extends View implements Observer<PhraseState> {
     BorderPane borderPane;
     Button startButton, nextButton;
-    String[] buttonColor0 = {"#121212", "#ffffff"}; // buttonColor set 0, {Button fill colour, button text colour"}
+    String[] buttonColor0 = {"#121212", "#ffffff"}; // buttonColor set 0, {Button fill colour, button text colour"} ;;;
 
     Timeline timeline;
     Font font;
