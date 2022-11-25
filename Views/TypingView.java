@@ -24,7 +24,7 @@ import javafx.util.Duration;
 public class TypingView extends View implements Observer<PhraseState> {
     BorderPane borderPane;
     Button startButton, nextButton;
-    String[] buttonColor0 = {"#121212", "#ffffff"}; // buttonColor set 0, {Button fill colour, button text colour"} ;;;
+    String[] buttonColor0 = {"#121212", "#ffffff"}; // buttonColor set 0, {Button fill colour, button text colour"}
 
     Timeline timeline;
     Font font;
@@ -40,10 +40,10 @@ public class TypingView extends View implements Observer<PhraseState> {
     private String defaultFontStyle = "Arial";
 
     // Visual Cursor stuff
-    private int cursorX = 20;
-    private int cursorY;
+    private int cursorX = 0;
+    private int cursorY = 30;
 
-    Color cursorCol = Color.GRAY;
+    Color cursorCol = Color.WHITE;
 
     public TypingView(Controller control){
         super(control);
@@ -79,7 +79,7 @@ public class TypingView extends View implements Observer<PhraseState> {
         controls.setAlignment(Pos.CENTER);
 
         //The canvas
-        canvas = new Canvas(800, 400);
+        canvas = new Canvas(700, 150);
         canvas.setId("Canvas");
         gc = canvas.getGraphicsContext2D();
 
@@ -112,65 +112,89 @@ public class TypingView extends View implements Observer<PhraseState> {
         scene = new Scene(borderPane, 950, 650);
     }
 
+    /*
+     * Draws the prompt text on the canvas.
+     */
     private void drawScreen() {
-        //Setting the text colour, alignment, and font
-        gc.setFill(Color.WHITE);
+        //Setting the text alignment, and font
         gc.setFont(font);
         gc.setTextAlign(TextAlignment.LEFT);
 
-
         // The coordinates for where to draw the text, these are the default values.
-        int currX = 20;
+        int currX = 0;
         int currY = 30;
-        cursorY = currY + 6;
+        cursorY = currY;
         char currChar;
 
         String phrase = this.state.getPhrase();
         boolean[] phraseBool = this.state.getCorrectness();
         int cursor = this.state.getCursorPos();
 
-        gc.clearRect(cursorX, cursorY - this.font.getSize(), 2, this.font.getSize());
-
+        int currLineWidth; // the width of the current line of text
+        int currInd; // the current index of the word that will be pre-checked
         for(int ind = 0; ind < phrase.length(); ind++){
             currChar = phrase.charAt(ind);
+            currInd = ind;
 
             Text text = new Text(Character.toString(currChar));
             text.setFont(font);
             int dx = (int) Math.ceil(text.getLayoutBounds().getWidth()); //the width of the text to be printed
 
+            // pre-checking whether the next drawn WORD (not character) will go out of the bound for the canvas.
+            Text check;
+            char checkChar;
+            boolean pass = false;
+            // Only need to check if a word that comes after a space will go out of bounds.
+            if(currChar == ' '){
+                currInd++;
+                checkChar = phrase.charAt(currInd);
+                check = new Text(Character.toString(checkChar));
+                check.setFont(font);
+                currLineWidth = currX + (int) Math.ceil(check.getLayoutBounds().getWidth());
 
+                while (checkChar != ' '){ // a word ends when the last character is followed by a space.
+                    // the line width must be less than the canvas width
+                    if(currLineWidth < canvas.getWidth() && currInd + 1 < phrase.length()){
+                        currInd++;
+                        checkChar = phrase.charAt(currInd);
+                        check = new Text(Character.toString(checkChar));
+                        currLineWidth = currLineWidth + (int) Math.ceil(check.getLayoutBounds().getWidth());
+                    }
+                    // the word will fall out of the canvas, so need to change x and y coordinates to the next line
+                    else{
+                        currX = 0;
+                        currY = currY + 45;
+                        this.cursorY = currY;
+                        pass = true;
+                        break;
+                    }
+                }
+            }
 
             //Setting the character colour.
             if(ind < cursor){
                 if (phraseBool[ind]){ // Text typed correctly
                     gc.setFill(textPallette[0]);
-                    //this.cursorX = currX + dx;
                 }
                 else{ //Text typed incorrectly
                     gc.setFill(textPallette[2]);
-                    //this.cursorX = currX + dx;
                 }
             }
             else { // Text which still needs to be typed
                 gc.setFill(textPallette[1]);
             }
-            //Drawing the current character
-            gc.fillText(Character.toString(currChar), currX, currY);
 
+            if(currY <= canvas.getHeight() && !pass) {
+                //Drawing the current character
+                gc.fillText(Character.toString(currChar), currX, currY);
+            }
+            currX = currX + dx;
             // Sets where to draw a visual cursor
             if (ind == cursor){
-                cursorX = currX;
+                this.cursorX = currX-dx;
+                this.drawCursor();
             }
 
-            //To handle text wrapping.
-            if (currX + dx + 14 + 10 < canvas.getWidth()){
-                currX = currX + dx;
-            }
-            else{ // moving to the next line
-                currX = 20;
-                currY = currY + 45;
-                this.cursorY = currY;
-            }
         }
     }
 
@@ -179,11 +203,20 @@ public class TypingView extends View implements Observer<PhraseState> {
      */
     private void drawCursor(){
         gc.setFill(cursorCol);
-        gc.fillRect(cursorX, cursorY - this.font.getSize(), 2, this.font.getSize());
+        gc.fillRect(this.cursorX, this.cursorY - this.font.getSize(), 2, this.font.getSize());
     }
 
+    /*
+     * Update the screen to show any changes caused by inputs.
+     */
     private void updateScreen() {
         if(!(this.state == null)){
+            // Refreshing the canvas, to simplify drawing adn un-drawing elements.
+            canvas = new Canvas(700, 150);
+            canvas.setId("Canvas");
+            gc = canvas.getGraphicsContext2D();
+            borderPane.setCenter(canvas);
+
             this.drawScreen();
             this.drawCursor();
         }
