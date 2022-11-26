@@ -4,6 +4,7 @@ import Model.PhraseCorrectness;
 import Model.TypingStatistics;
 import Views.TypingView;
 import Views.View;
+import Views.StatView;
 import javafx.stage.Stage;
 
 enum Theme {
@@ -22,6 +23,7 @@ public class Controller {
     View currentView;
     View otherView;
     TypingView typingView;
+    StatView statView;
     PhraseCorrectness correctness;
     TypingStatistics typingStatistics;
     boolean gameStarted;
@@ -67,7 +69,7 @@ public class Controller {
         
         if (input.equals("backspace")) {
             correctness.removeCharacter();
-            typingStatistics.
+            typingStatistics.removeCharacter();
         }
         else {
             typingStatistics.addCharacter(input.charAt(0), correctness.addCharacter(input.charAt(0)));
@@ -79,7 +81,10 @@ public class Controller {
     }
 
     private void switchView(Views view) {
-        throw new UnsupportedOperationException();
+        switch (view) {
+            case STATS -> stage.setScene(statView.getScene());
+            case TYPING -> stage.setScene(typingView.getScene());
+        }
     }
 
     public boolean isGameStarted() {
