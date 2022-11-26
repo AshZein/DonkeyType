@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class PromptStatistics {
     private int score;
@@ -14,7 +15,7 @@ public class PromptStatistics {
      * Constructor for PromptStatistics
      */
     PromptStatistics() {
-        this.phrase = "";
+        phrase = "";
         time = 0;
         correctlyTypedCharacters = 0;
         totalWords = new ArrayList<>();
@@ -48,7 +49,11 @@ public class PromptStatistics {
      * Reset the statistics state
      */
     void resetStatistics() {
-        throw new UnsupportedOperationException();
+        phrase = "";
+        time = 0;
+        correctlyTypedCharacters = 0;
+        totalWords.clear();
+        mistypedWords.clear();
     }
 
     /**
@@ -106,14 +111,18 @@ public class PromptStatistics {
      * @return WPM
      */
     public int calculateWPM() {
-        throw new UnsupportedOperationException();
+        return (int) Math.ceil(time / ((double) correctlyTypedCharacters / 5));
     }
 
     /**
-     * Calculate the accuracy of what is currently typed
+     * Calculate the accuracy of what is currently typed based on the percentage of mistyped words.
      * @return accuracy in percentage
      */
     public int calculateAccuracy() {
-        throw new UnsupportedOperationException();
+        HashSet<String> mistypedSet = new HashSet<>(mistypedWords);
+        HashSet<String> totalTypedSet = new HashSet<>(totalWords);
+        HashSet<String> intersection = new HashSet<>(totalWords);
+        intersection.retainAll(mistypedSet);
+        return (int) Math.ceil((double) intersection.size() / totalTypedSet.size()) * 100;
     }
 }
