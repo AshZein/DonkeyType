@@ -26,8 +26,9 @@ public class Controller {
     StatView statView;
     PhraseCorrectness correctness;
     TypingStatistics typingStatistics;
-    boolean gameStarted;
-    double gameStartTime;
+    private boolean gameStarted;
+    private double gameStartTime;
+    private String currentPhrase;
 
     public Controller(Stage stage) {
         typingView = new TypingView(this);
@@ -54,19 +55,21 @@ public class Controller {
     }
 
     public void startTest() {
-        throw new UnsupportedOperationException();
+        if (!gameStarted) gameStarted = true;
+        typingStatistics.resetStatistics();
+        typingStatistics.changePhrase(currentPhrase);
+        correctness.setPhrase(currentPhrase);
+        this.gameStartTime = System.nanoTime();
     }
 
     public void endTest() {
-        throw new UnsupportedOperationException();
+        typingStatistics.setTime((System.nanoTime() - gameStartTime) * 1_000_000_000);
+        switchView(Views.STATS);
     }
 
     public void handleKeystroke(String input) {
-        if (!gameStarted) {
-            gameStarted = true;
-            gameStartTime = System.nanoTime();
-        }
-        
+        if (!gameStarted) startTest();
+
         if (input.equals("backspace")) {
             correctness.removeCharacter();
             typingStatistics.removeCharacter();
