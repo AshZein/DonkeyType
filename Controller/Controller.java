@@ -24,7 +24,8 @@ public class Controller {
     TypingView typingView;
     PhraseCorrectness correctness;
     boolean gameStarted;
-    double gameStartTime;
+    long gameStartTime;
+    double timeLimit = 0;
     PromptGenerator promptGen;
 
     public Controller(Stage stage) {
@@ -86,6 +87,16 @@ public class Controller {
 
     public void updatePrompt(){
         correctness.setPhrase(promptGen.getNextPrompt());
+    }
+    public void setTimeLimit(double time){
+        timeLimit = time;
+    }
+
+    public double getTimeLeft(){
+        if(gameStartTime == 0){
+            return timeLimit;
+        }
+        return timeLimit - (double) ((System.nanoTime() - gameStartTime)/1000000000);
     }
 }
 
