@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.PhraseCorrectness;
+import Model.TypingStatistics;
 import Views.TypingView;
 import Views.View;
 import javafx.stage.Stage;
@@ -22,6 +23,7 @@ public class Controller {
     View otherView;
     TypingView typingView;
     PhraseCorrectness correctness;
+    TypingStatistics typingStatistics;
     boolean gameStarted;
     double gameStartTime;
 
@@ -63,8 +65,13 @@ public class Controller {
             gameStartTime = System.nanoTime();
         }
         
-        if (input.equals("backspace")) correctness.removeCharacter();
-        else correctness.addCharacter(input.charAt(0));
+        if (input.equals("backspace")) {
+            correctness.removeCharacter();
+            typingStatistics.
+        }
+        else {
+            typingStatistics.addCharacter(input.charAt(0), correctness.addCharacter(input.charAt(0)));
+        }
     }
 
     private void gameTick() {

@@ -32,6 +32,14 @@ public class TypingStatistics implements Observable<PromptStatistics> {
     }
 
     /**
+     * Remove the last typed character
+     */
+    public void removeCharacter() {
+        state.removeCharacter();
+        notifyObservers();
+    }
+
+    /**
      * Sets the phrase currently being typed
      * @param phrase
      */

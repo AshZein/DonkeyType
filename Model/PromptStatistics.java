@@ -40,6 +40,11 @@ public class PromptStatistics {
     }
 
     /**
+     * Removes the last typed character;
+     */
+    void removeCharacter() {throw new UnsupportedOperationException();}
+
+    /**
      * Reset the statistics state
      */
     void resetStatistics() {
