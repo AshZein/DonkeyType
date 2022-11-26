@@ -23,7 +23,7 @@ import javafx.util.Duration;
 
 public class TypingView extends View implements Observer<PhraseState> {
     BorderPane borderPane;
-    Button startButton, nextButton;
+   // Button startButton, nextButton; //start test and next test buttons
     Button fiveSecButton, fifteenSecButton, halfMinButton, fullMinButton;
     String[] buttonColorMain = {"#121212", "#ffffff"}; // buttonColor set for main buttons, {Button fill colour, button text colour}
     String[] buttonColorTime = {"#121212", "#ffffff", "#00ff00", "#000000"}; //buttonColor set for time set buttons, {Button fill colour, button text colour, selected fill colour, selected text}
@@ -69,17 +69,17 @@ public class TypingView extends View implements Observer<PhraseState> {
         borderPane.setStyle("-fx-background-color: " + UIColor + ";");
 
         //Buttons
-        startButton = new Button("Start Test");
-        startButton.setId("Start Test");
-        startButton.setPrefSize(100, 40);
-        startButton.setFont(buttonFont);
-        startButton.setStyle("-fx-background-color:" + buttonColorMain[0]+ "; -fx-text-fill: " + buttonColorMain[1]+ ";");
-
-        nextButton = new Button("Next Test");
-        nextButton.setId("Next Test");
-        nextButton.setPrefSize(100, 40);
-        nextButton.setFont(new Font (12));
-        nextButton.setStyle("-fx-background-color:" + buttonColorMain[0]+ "; -fx-text-fill: " +buttonColorMain[1]+ ";");
+//        startButton = new Button("Start Test");
+//        startButton.setId("Start Test");
+//        startButton.setPrefSize(100, 40);
+//        startButton.setFont(buttonFont);
+//        startButton.setStyle("-fx-background-color:" + buttonColorMain[0]+ "; -fx-text-fill: " + buttonColorMain[1]+ ";");
+//
+//        nextButton = new Button("Next Test");
+//        nextButton.setId("Next Test");
+//        nextButton.setPrefSize(100, 40);
+//        nextButton.setFont(new Font (12));
+//        nextButton.setStyle("-fx-background-color:" + buttonColorMain[0]+ "; -fx-text-fill: " +buttonColorMain[1]+ ";");
 
         //Time setting buttons
         halfMinButton = new Button("30s");
@@ -107,9 +107,9 @@ public class TypingView extends View implements Observer<PhraseState> {
         fiveSecButton .setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
 
         // button spacing and positioning
-        HBox mainControls = new HBox(40, startButton, nextButton);
-        mainControls.setPadding(new Insets(20, 20, 20, 20));
-        mainControls.setAlignment(Pos.CENTER);
+//        HBox mainControls = new HBox(40, startButton, nextButton);
+//        mainControls.setPadding(new Insets(20, 20, 20, 20));
+//        mainControls.setAlignment(Pos.CENTER);
 
         HBox timeControls = new HBox(40, fiveSecButton, fifteenSecButton, halfMinButton, fullMinButton);
         timeControls.setPadding(new Insets(20, 20, 20, 20));
@@ -193,7 +193,7 @@ public class TypingView extends View implements Observer<PhraseState> {
 
         // Positioning of various UI elements
         borderPane.setCenter(canvas);
-        borderPane.setBottom(mainControls);
+//        borderPane.setBottom(mainControls);
         borderPane.setTop(timeControls);
 
         timeline = new Timeline(new KeyFrame(Duration.seconds(0.001), e->updateScreen()));
