@@ -64,13 +64,14 @@ public class Controller {
     }
 
     public void handleKeystroke(String input) {
-        if (!gameStarted) {
-            gameStarted = true;
-            gameStartTime = System.nanoTime();
+        if(timeLimit != 0) {
+            if (!gameStarted) {
+                gameStarted = true;
+                gameStartTime = System.nanoTime();
+            }
+            if (input.equals("backspace")) correctness.removeCharacter();
+            else correctness.addCharacter(input.charAt(0));
         }
-        
-        if (input.equals("backspace")) correctness.removeCharacter();
-        else correctness.addCharacter(input.charAt(0));
     }
 
     private void gameTick() {
