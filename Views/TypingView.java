@@ -108,22 +108,27 @@ public class TypingView extends View implements Observer<PhraseState> {
         canvas.setId("Canvas");
         gc = canvas.getGraphicsContext2D();
 
-        // Handling the time limit setting buttons
-        halfMinButton.setOnAction(e -> {
-            //Changing the colour for the selected button and deselected button
-            halfMinButton.setStyle("-fx-background-color:" + buttonColorTime[2]+ "; -fx-text-fill: " + buttonColorTime[3]+ ";");
-            fullMinButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
 
-            control.setTimeLimit(30.0);
-        });
+            // Handling the time limit setting buttons
+            halfMinButton.setOnAction(e -> {
+                if(!control.isGameStarted()) { // can't change time if game is started
+                //Changing the colour for the selected button and deselected button
+                    halfMinButton.setStyle("-fx-background-color:" + buttonColorTime[2] + "; -fx-text-fill: " + buttonColorTime[3] + ";");
+                    fullMinButton.setStyle("-fx-background-color:" + buttonColorTime[0] + "; -fx-text-fill: " + buttonColorTime[1] + ";");
 
-        fullMinButton.setOnAction(e -> {
-            //Changing the colour for the selected button and deselected button
-            halfMinButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
-            fullMinButton.setStyle("-fx-background-color:" + buttonColorTime[2]+ "; -fx-text-fill: " + buttonColorTime[3]+ ";");
+                    control.setTimeLimit(30.0);
+                }
+            });
 
-            control.setTimeLimit(60.0);
-        });
+            fullMinButton.setOnAction(e -> {
+                if(!control.isGameStarted()) {
+                    //Changing the colour for the selected button and deselected button
+                    halfMinButton.setStyle("-fx-background-color:" + buttonColorTime[0] + "; -fx-text-fill: " + buttonColorTime[1] + ";");
+                    fullMinButton.setStyle("-fx-background-color:" + buttonColorTime[2] + "; -fx-text-fill: " + buttonColorTime[3] + ";");
+
+                    control.setTimeLimit(60.0);
+                }
+            });
 
         //The event handler for keyboard events
         borderPane.setOnKeyReleased(new EventHandler<KeyEvent>() {
@@ -164,15 +169,15 @@ public class TypingView extends View implements Observer<PhraseState> {
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setFill(Color.WHITE);
         Integer time = (int)control.getTimeLeft();
-        if(control.timeLimit != 0) {
+        if(control.timeLimit != 0) { // prevent timer from being shown before user selects a limit
             if (time > 0) {
                 gc.fillText(time.toString(), canvas.getWidth() / 2, 40);
-            } else {
+            } else { // timer goes into negatives
                 gc.fillText("0", canvas.getWidth() / 2, 40);
             }
         }
 
-
+        // if the user is at the end of the prompt need to fetch the next
         if (this.state.getCursorPos() == this.state.getPhrase().length()){
             control.updatePrompt();
         }

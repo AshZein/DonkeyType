@@ -64,7 +64,7 @@ public class Controller {
     }
 
     public void handleKeystroke(String input) {
-        if(timeLimit != 0) {
+        if(timeLimit != 0) { // can't handle keystrokes before a time limit is chosen
             if (!gameStarted) {
                 gameStarted = true;
                 gameStartTime = System.nanoTime();
@@ -89,12 +89,14 @@ public class Controller {
     public void updatePrompt(){
         correctness.setPhrase(promptGen.getNextPrompt());
     }
+    // setter for setting the timelimit the user desires
     public void setTimeLimit(double time){
         timeLimit = time;
     }
 
+    // Getter for the time remaining in the countdown
     public double getTimeLeft(){
-        if(gameStartTime == 0){
+        if(gameStartTime == 0){ // can't start counting down if no key strokes have been entered
             return timeLimit;
         }
         return timeLimit - (double) ((System.nanoTime() - gameStartTime)/1000000000);
