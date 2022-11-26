@@ -94,13 +94,24 @@ public class TypingView extends View implements Observer<PhraseState> {
         fullMinButton.setFont(buttonFont);
         fullMinButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
 
+        fifteenSecButton = new Button("15s");
+        fifteenSecButton .setId("15s");
+        fifteenSecButton .setPrefSize(100,40);
+        fifteenSecButton .setFont(buttonFont);
+        fifteenSecButton .setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
+
+        fiveSecButton = new Button("5s");
+        fiveSecButton .setId("5s");
+        fiveSecButton .setPrefSize(100,40);
+        fiveSecButton .setFont(buttonFont);
+        fiveSecButton .setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
 
         // button spacing and positioning
         HBox mainControls = new HBox(40, startButton, nextButton);
         mainControls.setPadding(new Insets(20, 20, 20, 20));
         mainControls.setAlignment(Pos.CENTER);
 
-        HBox timeControls = new HBox(40, halfMinButton, fullMinButton);
+        HBox timeControls = new HBox(40, fiveSecButton, fifteenSecButton, halfMinButton, fullMinButton);
         timeControls.setPadding(new Insets(20, 20, 20, 20));
         timeControls.setAlignment(Pos.CENTER);
 
@@ -114,8 +125,11 @@ public class TypingView extends View implements Observer<PhraseState> {
         halfMinButton.setOnAction(e -> {
             if(!control.isGameStarted()) { // can't change time if game is started
             //Changing the colour for the selected button and deselected button
-                halfMinButton.setStyle("-fx-background-color:" + buttonColorTime[2] + "; -fx-text-fill: " + buttonColorTime[3] + ";");
+                fifteenSecButton.setStyle("-fx-background-color:" + buttonColorTime[0] + "; -fx-text-fill: " + buttonColorTime[1] + ";");
+                fiveSecButton.setStyle("-fx-background-color:" + buttonColorTime[0] + "; -fx-text-fill: " + buttonColorTime[1] + ";");
                 fullMinButton.setStyle("-fx-background-color:" + buttonColorTime[0] + "; -fx-text-fill: " + buttonColorTime[1] + ";");
+
+                halfMinButton.setStyle("-fx-background-color:" + buttonColorTime[2] + "; -fx-text-fill: " + buttonColorTime[3] + ";");
 
                 control.setTimeLimit(30.0);
             }
@@ -125,9 +139,37 @@ public class TypingView extends View implements Observer<PhraseState> {
             if(!control.isGameStarted()) {
                 //Changing the colour for the selected button and deselected button
                 halfMinButton.setStyle("-fx-background-color:" + buttonColorTime[0] + "; -fx-text-fill: " + buttonColorTime[1] + ";");
+                fifteenSecButton.setStyle("-fx-background-color:" + buttonColorTime[0] + "; -fx-text-fill: " + buttonColorTime[1] + ";");
+                fiveSecButton.setStyle("-fx-background-color:" + buttonColorTime[0] + "; -fx-text-fill: " + buttonColorTime[1] + ";");
+
                 fullMinButton.setStyle("-fx-background-color:" + buttonColorTime[2] + "; -fx-text-fill: " + buttonColorTime[3] + ";");
 
                 control.setTimeLimit(60.0);
+            }
+        });
+        fiveSecButton.setOnAction(e -> {
+            if(!control.isGameStarted()) {
+                //Changing the colour for the selected button and deselected button
+                halfMinButton.setStyle("-fx-background-color:" + buttonColorTime[0] + "; -fx-text-fill: " + buttonColorTime[1] + ";");
+                fullMinButton.setStyle("-fx-background-color:" + buttonColorTime[0] + "; -fx-text-fill: " + buttonColorTime[1] + ";");
+                fifteenSecButton.setStyle("-fx-background-color:" + buttonColorTime[0] + "; -fx-text-fill: " + buttonColorTime[1] + ";");
+
+                fiveSecButton.setStyle("-fx-background-color:" + buttonColorTime[2] + "; -fx-text-fill: " + buttonColorTime[3] + ";");
+
+                control.setTimeLimit(5.0);
+            }
+        });
+
+        fifteenSecButton.setOnAction(e -> {
+            if(!control.isGameStarted()) {
+                //Changing the colour for the selected button and deselected button
+                halfMinButton.setStyle("-fx-background-color:" + buttonColorTime[0] + "; -fx-text-fill: " + buttonColorTime[1] + ";");
+                fullMinButton.setStyle("-fx-background-color:" + buttonColorTime[0] + "; -fx-text-fill: " + buttonColorTime[1] + ";");
+                fiveSecButton.setStyle("-fx-background-color:" + buttonColorTime[0] + "; -fx-text-fill: " + buttonColorTime[1] + ";");
+
+                fifteenSecButton.setStyle("-fx-background-color:" + buttonColorTime[2] + "; -fx-text-fill: " + buttonColorTime[3] + ";");
+
+                control.setTimeLimit(15.0);
             }
         });
 

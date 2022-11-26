@@ -57,6 +57,7 @@ public class Controller {
 
     public void startTest() {
         gameStartTime = System.nanoTime();
+        this.gameStarted = true;
     }
 
     public void endTest() {
@@ -66,7 +67,7 @@ public class Controller {
     }
 
     public void handleKeystroke(String input) {
-        if (gameStarted) {
+        if (timeLimit != 0) {
             if(gameStartTime == 0) {
                 this.startTest();
             }
@@ -93,7 +94,6 @@ public class Controller {
     // setter for setting the timelimit the user desires
     public void setTimeLimit(double time){
         timeLimit = time;
-        this.gameStarted = true; // the game is started when the time limit is selected.
     }
 
     // Getter for the time remaining in the countdown
