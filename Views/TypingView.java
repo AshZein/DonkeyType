@@ -39,10 +39,12 @@ public class TypingView extends View implements Observer<PhraseState> {
     private int defaultFontSize = 36;
     private String defaultFontStyle = "Arial";
 
+    private int defCurrX = 0;
+    private int defCurrY = 30;
+
     // Visual Cursor stuff
     private int cursorX = 0;
     private int cursorY = 30;
-
     Color cursorCol = Color.WHITE;
 
     public TypingView(Controller control){
@@ -116,13 +118,17 @@ public class TypingView extends View implements Observer<PhraseState> {
      * Draws the prompt text on the canvas.
      */
     private void drawScreen() {
+        if (this.state.getCursorPos() == this.state.getPhrase().length()){
+            control.updatePrompt();
+        }
+
         //Setting the text alignment, and font
         gc.setFont(font);
         gc.setTextAlign(TextAlignment.LEFT);
 
         // The coordinates for where to draw the text, these are the default values.
-        int currX = 0;
-        int currY = 30;
+        int currX = defCurrX;
+        int currY = defCurrY;
         cursorY = currY;
         char currChar;
 
@@ -154,15 +160,18 @@ public class TypingView extends View implements Observer<PhraseState> {
 
                 while (checkChar != ' '){ // a word ends when the last character is followed by a space.
                     // the line width must be less than the canvas width
-                    if(currLineWidth < canvas.getWidth() && currInd + 1 < phrase.length()){
+                    if(currLineWidth < canvas.getWidth()){
                         currInd++;
+                        if(currInd == phrase.length()){
+                            break;
+                        }
                         checkChar = phrase.charAt(currInd);
                         check = new Text(Character.toString(checkChar));
                         currLineWidth = currLineWidth + (int) Math.ceil(check.getLayoutBounds().getWidth());
                     }
                     // the word will fall out of the canvas, so need to change x and y coordinates to the next line
                     else{
-                        currX = 0;
+                        currX = defCurrX;
                         currY = currY + 45;
                         this.cursorY = currY;
                         pass = true;

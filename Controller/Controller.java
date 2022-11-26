@@ -4,6 +4,7 @@ import Model.PhraseCorrectness;
 import Views.TypingView;
 import Views.View;
 import javafx.stage.Stage;
+import Prompt.PromptGenerator;
 
 enum Theme {
     NORMAL,
@@ -24,10 +25,14 @@ public class Controller {
     PhraseCorrectness correctness;
     boolean gameStarted;
     double gameStartTime;
+    PromptGenerator promptGen;
 
     public Controller(Stage stage) {
         typingView = new TypingView(this);
-        String tempPhrase = "The quick brown fox jumps over the lazy dog";
+        //String tempPhrase = "The quick brown fox jumps over the lazy dog The quick brown fox jumps over the lazy dog The quick brown fox jumps over the lazy dog";
+
+        promptGen = new PromptGenerator();
+        String tempPhrase = promptGen.getNextPrompt();
 
         correctness = new PhraseCorrectness(tempPhrase);
         correctness.register(typingView);
@@ -79,5 +84,8 @@ public class Controller {
         return gameStarted;
     }
 
+    public void updatePrompt(){
+        correctness.setPhrase(promptGen.getNextPrompt());
+    }
 }
 
