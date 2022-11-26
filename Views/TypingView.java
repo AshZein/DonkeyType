@@ -31,6 +31,7 @@ public class TypingView extends View implements Observer<PhraseState> {
     Timeline timeline;
     Font promptFont;
     Font buttonFont;
+    Font timerFont;
     PhraseState state;
     Color[] textPallette = {Color.WHITE, Color.GRAY, Color.RED}; // {correct, to be typed, Incorrect}
 
@@ -43,7 +44,7 @@ public class TypingView extends View implements Observer<PhraseState> {
     private String defaultFontStyle = "Arial";
 
     private int defCurrX = 0;
-    private int defCurrY = 30;
+    private int defCurrY = 90;
 
     // Visual Cursor stuff
     private int cursorX = 0;
@@ -62,6 +63,7 @@ public class TypingView extends View implements Observer<PhraseState> {
     private void initUI() {
         promptFont = new Font(defaultFontStyle, defaultFontSize);
         buttonFont = new Font(12);
+        timerFont = new Font(50);
 
         borderPane = new BorderPane();
         borderPane.setStyle("-fx-background-color: " + UIColor + ";");
@@ -102,7 +104,7 @@ public class TypingView extends View implements Observer<PhraseState> {
         timeControls.setAlignment(Pos.CENTER);
 
         //The canvas
-        canvas = new Canvas(700, 150);
+        canvas = new Canvas(700, 200);
         canvas.setId("Canvas");
         gc = canvas.getGraphicsContext2D();
 
@@ -157,6 +159,20 @@ public class TypingView extends View implements Observer<PhraseState> {
      * Draws the prompt text on the canvas.
      */
     private void drawScreen() {
+        // Timer Drawing
+        gc.setFont(timerFont);
+        gc.setTextAlign(TextAlignment.CENTER);
+        gc.setFill(Color.WHITE);
+        Integer time = (int)control.getTimeLeft();
+        if(control.timeLimit != 0) {
+            if (time > 0) {
+                gc.fillText(time.toString(), canvas.getWidth() / 2, 40);
+            } else {
+                gc.fillText("0", canvas.getWidth() / 2, 40);
+            }
+        }
+
+
         if (this.state.getCursorPos() == this.state.getPhrase().length()){
             control.updatePrompt();
         }
@@ -259,9 +275,9 @@ public class TypingView extends View implements Observer<PhraseState> {
      */
     private void updateScreen() {
         System.out.println(control.getTimeLeft());
-        if(!(this.state == null) && control.getTimeLeft() > 0.0){
+        if(!(this.state == null)){
             // Refreshing the canvas, to simplify drawing adn un-drawing elements.
-            canvas = new Canvas(700, 150);
+            canvas = new Canvas(700, 200);
             canvas.setId("Canvas");
             gc = canvas.getGraphicsContext2D();
             borderPane.setCenter(canvas);

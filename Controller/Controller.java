@@ -25,7 +25,7 @@ public class Controller {
     PhraseCorrectness correctness;
     boolean gameStarted;
     long gameStartTime;
-    double timeLimit = 0;
+    public double timeLimit = 0;
     PromptGenerator promptGen;
 
     public Controller(Stage stage) {
