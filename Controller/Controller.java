@@ -56,18 +56,19 @@ public class Controller {
     }
 
     public void startTest() {
-        throw new UnsupportedOperationException();
+        gameStartTime = System.nanoTime();
     }
 
     public void endTest() {
-        throw new UnsupportedOperationException();
+        gameStarted = false;
+        gameStartTime = 0;
+        timeLimit = 0;
     }
 
     public void handleKeystroke(String input) {
-        if(timeLimit != 0) { // can't handle keystrokes before a time limit is chosen
-            if (!gameStarted) {
-                gameStarted = true;
-                gameStartTime = System.nanoTime();
+        if (gameStarted) {
+            if(gameStartTime == 0) {
+                this.startTest();
             }
             if (input.equals("backspace")) correctness.removeCharacter();
             else correctness.addCharacter(input.charAt(0));
@@ -92,6 +93,7 @@ public class Controller {
     // setter for setting the timelimit the user desires
     public void setTimeLimit(double time){
         timeLimit = time;
+        this.gameStarted = true; // the game is started when the time limit is selected.
     }
 
     // Getter for the time remaining in the countdown
@@ -99,7 +101,11 @@ public class Controller {
         if(gameStartTime == 0){ // can't start counting down if no key strokes have been entered
             return timeLimit;
         }
-        return timeLimit - (double) ((System.nanoTime() - gameStartTime)/1000000000);
+        double timeLeft = timeLimit - (double) ((System.nanoTime() - gameStartTime)/1000000000);
+        if(timeLeft == 0){
+            this.endTest();
+        }
+        return timeLeft;
     }
 }
 
