@@ -48,8 +48,8 @@ public class TypingView extends View implements Observer<PhraseState> {
 
     // Visual Cursor stuff
     private int cursorX = 0;
-    private int cursorY = 30;
-    Color cursorCol = Color.WHITE;
+    private int cursorY;
+    Color cursorCol = Color.GRAY;
 
     public TypingView(Controller control){
         super(control);
@@ -302,7 +302,7 @@ public class TypingView extends View implements Observer<PhraseState> {
      */
     private void drawCursor(){
         gc.setFill(cursorCol);
-        gc.fillRect(this.cursorX, this.cursorY - this.promptFont.getSize(), 2, this.promptFont.getSize());
+        gc.fillRect(this.cursorX, this.cursorY - this.promptFont.getSize()+5, 2, this.promptFont.getSize()-2);
     }
 
     /*
