@@ -64,28 +64,32 @@ public class Controller {
 
     public void startTest() {
         this.gameStarted = true;
+        gameStartTime = System.nanoTime();
         typingStatistics.setTime(timeLimit);
     }
 
 
     public void endTest() {
         typingStatistics.setTime(timeLimit);
-        switchView(Views.STATS);
+        //switchView(Views.STATS);
         gameStarted = false;
         gameStartTime = 0;
         timeLimit = 0;
     }
 
     public void handleKeystroke(String input) {
-        if (!gameStarted) startTest();
-        if (timeLimit == 0) endTest();
-
-        if (input.equals("backspace")) {
-            correctness.removeCharacter();
-            typingStatistics.removeCharacter();
-        }
-        else {
-            typingStatistics.addCharacter(input.charAt(0), correctness.addCharacter(input.charAt(0)));
+//        if (!gameStarted) startTest() {
+//            if (timeLimit == 0) endTest() {
+        if(timeLimit != 0){
+            if(gameStartTime == 0){
+                this.startTest();
+            }
+            if (input.equals("backspace")) {
+                correctness.removeCharacter();
+                typingStatistics.removeCharacter();
+            } else {
+                typingStatistics.addCharacter(input.charAt(0), correctness.addCharacter(input.charAt(0)));
+            }
         }
     }
 
@@ -107,7 +111,7 @@ public class Controller {
     public void updatePrompt(){
         String phrase = promptGen.getNextPrompt();
         correctness.setPhrase(phrase);
-        typingStatistics.changePhrase(phrase)
+        typingStatistics.changePhrase(phrase);
     }
     // setter for setting the timelimit the user desires
     public void setTimeLimit(double time){
