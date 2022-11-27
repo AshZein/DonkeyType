@@ -146,7 +146,7 @@ public class PromptStatistics {
      * @return WPM
      */
     public int calculateWPM() {
-        return (int) Math.ceil(time / ((double) correctlyTypedCharacters / 5));
+        return (int) Math.ceil(((double) correctlyTypedCharacters / 5) / (time / 60));
     }
 
     /**
