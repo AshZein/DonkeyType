@@ -1,8 +1,10 @@
 package Controller;
 
 import Model.PhraseCorrectness;
+import Model.TypingStatistics;
 import Views.TypingView;
 import Views.View;
+import Views.StatView;
 import javafx.stage.Stage;
 import PromptGenerator.PromptGenerator;
 
@@ -24,14 +26,18 @@ public class Controller {
     View currentView;
     View otherView;
     TypingView typingView;
+    StatView statView;
     PhraseCorrectness correctness;
     boolean gameStarted;
     long gameStartTime;
     public double timeLimit = 0;
     PromptGenerator promptGen;
+    TypingStatistics typingStatistics;
+
 
     public Controller(Stage stage) throws IOException {
         typingView = new TypingView(this);
+        typingStatistics = new TypingStatistics();
 
         promptGen = new PromptGenerator();
         String tempPhrase = promptGen.getNextPrompt();
@@ -57,23 +63,29 @@ public class Controller {
     }
 
     public void startTest() {
-        gameStartTime = System.nanoTime();
         this.gameStarted = true;
+        typingStatistics.setTime(timeLimit);
     }
 
+
     public void endTest() {
+        typingStatistics.setTime(timeLimit);
+        switchView(Views.STATS);
         gameStarted = false;
         gameStartTime = 0;
         timeLimit = 0;
     }
 
     public void handleKeystroke(String input) {
-        if (timeLimit != 0) {
-            if(gameStartTime == 0) {
-                this.startTest();
-            }
-            if (input.equals("backspace")) correctness.removeCharacter();
-            else correctness.addCharacter(input.charAt(0));
+        if (!gameStarted) startTest();
+        if (timeLimit == 0) endTest();
+
+        if (input.equals("backspace")) {
+            correctness.removeCharacter();
+            typingStatistics.removeCharacter();
+        }
+        else {
+            typingStatistics.addCharacter(input.charAt(0), correctness.addCharacter(input.charAt(0)));
         }
     }
 
@@ -82,7 +94,10 @@ public class Controller {
     }
 
     private void switchView(Views view) {
-        throw new UnsupportedOperationException();
+        switch (view) {
+            case STATS -> stage.setScene(statView.getScene());
+            case TYPING -> stage.setScene(typingView.getScene());
+        }
     }
 
     public boolean isGameStarted() {
@@ -90,7 +105,9 @@ public class Controller {
     }
 
     public void updatePrompt(){
-        correctness.setPhrase(promptGen.getNextPrompt());
+        String phrase = promptGen.getNextPrompt();
+        correctness.setPhrase(phrase);
+        typingStatistics.changePhrase(phrase)
     }
     // setter for setting the timelimit the user desires
     public void setTimeLimit(double time){
