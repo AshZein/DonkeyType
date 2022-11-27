@@ -6,6 +6,9 @@ import Views.TypingView;
 import Views.View;
 import Views.StatView;
 import javafx.stage.Stage;
+import PromptGenerator.PromptGenerator;
+
+import java.io.IOException;
 
 enum Theme {
     NORMAL,
@@ -25,14 +28,19 @@ public class Controller {
     TypingView typingView;
     StatView statView;
     PhraseCorrectness correctness;
+    boolean gameStarted;
+    long gameStartTime;
+    public double timeLimit = 0;
+    PromptGenerator promptGen;
     TypingStatistics typingStatistics;
-    private boolean gameStarted;
-    private String currentPhrase;
-    double timeLimit = 0;
 
-    public Controller(Stage stage) {
+
+    public Controller(Stage stage) throws IOException {
         typingView = new TypingView(this);
-        String tempPhrase = "The quick brown fox jumps over the lazy dog";
+        typingStatistics = new TypingStatistics();
+
+        promptGen = new PromptGenerator();
+        String tempPhrase = promptGen.getNextPrompt();
 
         correctness = new PhraseCorrectness(tempPhrase);
         correctness.register(typingView);
@@ -55,19 +63,22 @@ public class Controller {
     }
 
     public void startTest() {
-        if (!gameStarted) gameStarted = true;
-        typingStatistics.resetStatistics();
-        typingStatistics.changePhrase(currentPhrase);
-        correctness.setPhrase(currentPhrase);
+        this.gameStarted = true;
+        typingStatistics.setTime(timeLimit);
     }
+
 
     public void endTest() {
         typingStatistics.setTime(timeLimit);
         switchView(Views.STATS);
+        gameStarted = false;
+        gameStartTime = 0;
+        timeLimit = 0;
     }
 
     public void handleKeystroke(String input) {
         if (!gameStarted) startTest();
+        if (timeLimit == 0) endTest();
 
         if (input.equals("backspace")) {
             correctness.removeCharacter();
@@ -93,5 +104,26 @@ public class Controller {
         return gameStarted;
     }
 
+    public void updatePrompt(){
+        String phrase = promptGen.getNextPrompt();
+        correctness.setPhrase(phrase);
+        typingStatistics.changePhrase(phrase)
+    }
+    // setter for setting the timelimit the user desires
+    public void setTimeLimit(double time){
+        timeLimit = time;
+    }
+
+    // Getter for the time remaining in the countdown
+    public double getTimeLeft(){
+        if(gameStartTime == 0){ // can't start counting down if no key strokes have been entered
+            return timeLimit;
+        }
+        double timeLeft = timeLimit - (double) ((System.nanoTime() - gameStartTime)/1000000000);
+        if(timeLeft == 0){
+            this.endTest();
+        }
+        return timeLeft;
+    }
 }
 
