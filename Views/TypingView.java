@@ -293,6 +293,10 @@ public class TypingView extends View implements Observer<PhraseState> {
         }
     }
 
+    /*
+     * adjusts the colour for the time limit buttons based on which button has been pressed. The selected button should
+     * be a unique colour, while the other buttons should be a colour not equal to the selected button.
+     */
     public void swapTimeButtonColour(String id){
         for(String i: timeLimButton.keySet()){
             Button b = timeLimButton.get(i);
