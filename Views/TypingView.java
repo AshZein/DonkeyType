@@ -25,8 +25,6 @@ import java.util.HashMap;
 
 public class TypingView extends View implements Observer<PhraseState> {
     BorderPane borderPane;
-   // Button startButton, nextButton; //start test and next test buttons
-    //Button fiveSecButton, fifteenSecButton, halfMinButton, fullMinButton;
     HashMap<String, Button> timeLimButton;
     String[] buttonColorMain = {"#121212", "#ffffff"}; // buttonColor set for main buttons, {Button fill colour, button text colour}
     String[] buttonColorTime = {"#121212", "#ffffff", "#00ff00", "#000000"}; //buttonColor set for time set buttons, {Button fill colour, button text colour, selected fill colour, selected text}
@@ -103,9 +101,6 @@ public class TypingView extends View implements Observer<PhraseState> {
         timeLimButton.put(fiveSecButton.getId(), fiveSecButton);
 
         // button spacing and positioning
-//        HBox mainControls = new HBox(40, startButton, nextButton);
-//        mainControls.setPadding(new Insets(20, 20, 20, 20));
-//        mainControls.setAlignment(Pos.CENTER);
 
         HBox timeControls = new HBox(40, fiveSecButton, fifteenSecButton, halfMinButton, fullMinButton);
         timeControls.setPadding(new Insets(20, 20, 20, 20));
@@ -326,7 +321,6 @@ public class TypingView extends View implements Observer<PhraseState> {
      * Update the screen to show any changes caused by inputs.
      */
     private void updateScreen() {
-        System.out.println(control.getTimeLeft());
         if(!(this.state == null)){
             // Refreshing the canvas, to simplify drawing adn un-drawing elements.
             canvas = new Canvas(700, 200);
