@@ -55,12 +55,14 @@ public class PhraseCorrectness implements Observable<PhraseState>{
      * Type a new character.
      * @param c character that will be compared to the corresponding one in 'phrase'
      */
-    public void addCharacter(char c){
-        if(cursorPos >= phrase.length()) return;
-        correctness[cursorPos] = (phrase.charAt(cursorPos) == c);
+    public boolean addCharacter(char c){
+        if (cursorPos >= phrase.length()) return false; // fail silently
+        boolean correct = phrase.charAt(cursorPos) == c;
+        correctness[cursorPos] = correct;
         cursorPos++;
         updatePhraseState();
         notifyObservers();
+        return correct;
     }
 
     /**
