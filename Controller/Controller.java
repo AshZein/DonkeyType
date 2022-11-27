@@ -68,6 +68,7 @@ public class Controller {
     }
 
     public void startTest() {
+        typingStatistics.resetStatistics();
         this.gameStarted = true;
         gameStartTime = System.nanoTime();
         typingStatistics.setTime(timeLimit);

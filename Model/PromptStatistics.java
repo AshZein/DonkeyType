@@ -96,6 +96,7 @@ public class PromptStatistics {
      */
     void setPhrase(String phrase) {
         this.phrase = phrase;
+        cursorPos = 0;
         this.totalWords.addAll(Arrays.asList(phrase.split("\\W+")));
     }
 
@@ -116,12 +117,12 @@ public class PromptStatistics {
     }
 
     /**
-     * Getter for the user's mistyped words. This list may contain duplicates depending on whether the user mistypes
-     * a word multiple times.
+     * Getter for the user's mistyped words.
      * @return mistypedWords
      */
     public ArrayList<String> getMistypedWords() {
-        return mistypedWords;
+
+        return new ArrayList<>(new HashSet<String>(mistypedWords));
     }
 
     /**
@@ -157,7 +158,8 @@ public class PromptStatistics {
         HashSet<String> mistypedSet = new HashSet<>(mistypedWords);
         HashSet<String> totalTypedSet = new HashSet<>(totalWords);
         HashSet<String> intersection = new HashSet<>(totalWords);
-        intersection.retainAll(mistypedSet);
+        intersection.removeAll(mistypedSet);
+        System.out.println(intersection.size());
         return (int) Math.ceil((double) intersection.size() / totalTypedSet.size()) * 100;
     }
 }
