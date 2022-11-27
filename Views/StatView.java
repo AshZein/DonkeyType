@@ -17,7 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.control.Label;
 
-public class StatView extends View implements Observer<PhraseState> {
+public class StatView extends View implements Observer<PromptStatistics> {
 
     BorderPane borderPane;
 
@@ -37,11 +37,12 @@ public class StatView extends View implements Observer<PhraseState> {
     }
 
     @Override
-    public void update(PhraseState state) {
-        this.stage = state;
+    public void update(PromptStatistics state) {
+        promptStatistics = state;
     }
 
     private void initUI() {
+        if (promptStatistics == null) return;
         // Note that the positioning of the elements will change as we progress
         // default font size and style
         font = new Font(defaultFontStyle, defaultFontSize);

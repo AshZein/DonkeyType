@@ -326,7 +326,6 @@ public class TypingView extends View implements Observer<PhraseState> {
      * Update the screen to show any changes caused by inputs.
      */
     private void updateScreen() {
-        System.out.println(control.getTimeLeft());
         if(!(this.state == null)){
             // Refreshing the canvas, to simplify drawing adn un-drawing elements.
             canvas = new Canvas(700, 200);

@@ -28,8 +28,8 @@ public class Controller {
     TypingView typingView;
     StatView statView;
     PhraseCorrectness correctness;
-    boolean gameStarted;
-    long gameStartTime;
+    private boolean gameStarted;
+    private long gameStartTime;
     public double timeLimit = 0;
     PromptGenerator promptGen;
     TypingStatistics typingStatistics;
@@ -37,7 +37,9 @@ public class Controller {
 
     public Controller(Stage stage) throws IOException {
         typingView = new TypingView(this);
+        statView = new StatView(this);
         typingStatistics = new TypingStatistics();
+        typingStatistics.register(statView);
 
         promptGen = new PromptGenerator();
         String tempPhrase = promptGen.getNextPrompt();
@@ -71,7 +73,7 @@ public class Controller {
 
     public void endTest() {
         typingStatistics.setTime(timeLimit);
-        //switchView(Views.STATS);
+        switchView(Views.STATS);
         gameStarted = false;
         gameStartTime = 0;
         timeLimit = 0;
