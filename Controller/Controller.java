@@ -27,8 +27,8 @@ public class Controller {
     PhraseCorrectness correctness;
     TypingStatistics typingStatistics;
     private boolean gameStarted;
-    private double gameStartTime;
     private String currentPhrase;
+    double timeLimit = 0;
 
     public Controller(Stage stage) {
         typingView = new TypingView(this);
@@ -59,11 +59,10 @@ public class Controller {
         typingStatistics.resetStatistics();
         typingStatistics.changePhrase(currentPhrase);
         correctness.setPhrase(currentPhrase);
-        this.gameStartTime = System.nanoTime();
     }
 
     public void endTest() {
-        typingStatistics.setTime((System.nanoTime() - gameStartTime) * 1_000_000_000);
+        typingStatistics.setTime(timeLimit);
         switchView(Views.STATS);
     }
 
