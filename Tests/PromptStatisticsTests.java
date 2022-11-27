@@ -21,6 +21,27 @@ public class PromptStatisticsTests {
         t.changePhrase("hi, this is a test.");
         PromptStatistics s = t.getState();
         assertEquals(new ArrayList<>(Arrays.asList("hi", "this", "is", "a", "test")), s.getTotalWords());
+
+        t = new TypingStatistics();
+        t.changePhrase("hi");
+        t.addCharacter('a', false);
+        t.changePhrase("bye");
+        t.addCharacter('a', false);
+        t.changePhrase("phrase");
+        t.addCharacter('a', false);
+        t.changePhrase("another");
+        t.addCharacter('a', false);
+        t.changePhrase("phrase");
+        t.addCharacter('a', false);
+        t.changePhrase("anotherone");
+        t.addCharacter('x', false);
+        t.changePhrase("aword");
+        t.addCharacter('x', false);
+
+        s = t.getState();
+        assertEquals(new HashSet<>(Arrays.asList("hi", "bye", "phrase", "another", "phrase", "anotherone", "aword")),
+                new HashSet<>(s.getTotalWords()));
+
     }
     @Test
     void mistypeWordsTest() {

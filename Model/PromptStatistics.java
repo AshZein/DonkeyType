@@ -159,7 +159,6 @@ public class PromptStatistics {
         HashSet<String> totalTypedSet = new HashSet<>(totalWords);
         HashSet<String> intersection = new HashSet<>(totalWords);
         intersection.removeAll(mistypedSet);
-        System.out.println(intersection.size());
-        return (int) Math.ceil((double) intersection.size() / totalTypedSet.size()) * 100;
+        return (int) (Math.ceil((double) intersection.size() / totalTypedSet.size() * 10000)) / 100;
     }
 }
