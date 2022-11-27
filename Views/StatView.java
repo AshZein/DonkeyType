@@ -17,7 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.control.Label;
 
-public class StatView extends View implements Observer<PhraseState>{
+public class StatView extends View implements Observer<PhraseState> {
 
     BorderPane borderPane;
 
@@ -35,8 +35,12 @@ public class StatView extends View implements Observer<PhraseState>{
         super(control);
         initUI();
     }
+
     @Override
-    public void update(PhraseState state) {this.stage = state;}
+    public void update(PhraseState state) {
+        this.stage = state;
+    }
+
     private void initUI() {
         // Note that the positioning of the elements will change as we progress
         // default font size and style
@@ -50,9 +54,9 @@ public class StatView extends View implements Observer<PhraseState>{
         aButton.setId("Button");
         aButton.setPrefSize(100, 40);
         aButton.setFont(new Font(12));
-        aButton.setStyle("-fx-background-color:" + buttonColor0[0]+ "; -fx-text-fill: " +buttonColor0[1]+ ";");
+        aButton.setStyle("-fx-background-color:" + buttonColor0[0] + "; -fx-text-fill: " + buttonColor0[1] + ";");
 
-        HBox controls = new HBox(40,aButton);
+        HBox controls = new HBox(40, aButton);
         controls.setPadding(new Insets(20, 20, 20, 20));
         controls.setAlignment(Pos.CENTER);
         borderPane.setCenter(canvas);
@@ -75,7 +79,7 @@ public class StatView extends View implements Observer<PhraseState>{
         borderPane.setCenter(labelforwpm);
 
         // Label to show Accuracy. The number will be  replaced by data from PromptStatistics
-        Label labelforaccuracy = new Label("Accuracy: " + promptStatistics.calculateAccuracy()+"%");
+        Label labelforaccuracy = new Label("Accuracy: " + promptStatistics.calculateAccuracy() + "%");
         labelforaccuracy.setFont(Font.font(defaultFontStyle));
         labelforaccuracy.setId("word per minute");
         borderPane.setLeft(labelforaccuracy);
@@ -85,10 +89,11 @@ public class StatView extends View implements Observer<PhraseState>{
         mistypedwords.editableProperty().set(false);
         mistypedwords.setMouseTransparent(true);
         // this will be populated by missed words from PromptStatistics
-        ObservableList<String> items = FXCollections.observableArrayList ("List of Mistyped Words:");
+        ObservableList<String> items = FXCollections.observableArrayList("List of Mistyped Words:");
         items.addAll(promptStatistics.getMistypedWords());
         mistypedwords.setItems(items);
-        mistypedwords.setPrefSize(300,100);
+        mistypedwords.setPrefSize(300, 100);
         borderPane.setRight(mistypedwords);
     }
+}
 
