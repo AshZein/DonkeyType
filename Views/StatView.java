@@ -75,7 +75,7 @@ public class StatView extends View implements Observer<PhraseState>{
         borderPane.setCenter(labelforwpm);
 
         // Label to show Accuracy. The number will be  replaced by data from PromptStatistics
-        Label labelforaccuracy = new Label("Accuracy: " + promptStatistics.calculateAccuracy());
+        Label labelforaccuracy = new Label("Accuracy: " + promptStatistics.calculateAccuracy()+"%");
         labelforaccuracy.setFont(Font.font(defaultFontStyle));
         labelforaccuracy.setId("word per minute");
         borderPane.setLeft(labelforaccuracy);
