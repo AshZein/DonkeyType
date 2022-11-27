@@ -92,5 +92,3 @@ public class StatView extends View implements Observer<PhraseState>{
         borderPane.setRight(mistypedwords);
     }
 
-}
-

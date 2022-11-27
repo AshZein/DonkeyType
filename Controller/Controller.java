@@ -1,8 +1,10 @@
 package Controller;
 
 import Model.PhraseCorrectness;
+import Model.TypingStatistics;
 import Views.TypingView;
 import Views.View;
+import Views.StatView;
 import javafx.stage.Stage;
 
 enum Theme {
@@ -21,9 +23,12 @@ public class Controller {
     View currentView;
     View otherView;
     TypingView typingView;
+    StatView statView;
     PhraseCorrectness correctness;
-    boolean gameStarted;
-    double gameStartTime;
+    TypingStatistics typingStatistics;
+    private boolean gameStarted;
+    private String currentPhrase;
+    double timeLimit = 0;
 
     public Controller(Stage stage) {
         typingView = new TypingView(this);
@@ -50,21 +55,27 @@ public class Controller {
     }
 
     public void startTest() {
-        throw new UnsupportedOperationException();
+        if (!gameStarted) gameStarted = true;
+        typingStatistics.resetStatistics();
+        typingStatistics.changePhrase(currentPhrase);
+        correctness.setPhrase(currentPhrase);
     }
 
     public void endTest() {
-        throw new UnsupportedOperationException();
+        typingStatistics.setTime(timeLimit);
+        switchView(Views.STATS);
     }
 
     public void handleKeystroke(String input) {
-        if (!gameStarted) {
-            gameStarted = true;
-            gameStartTime = System.nanoTime();
+        if (!gameStarted) startTest();
+
+        if (input.equals("backspace")) {
+            correctness.removeCharacter();
+            typingStatistics.removeCharacter();
         }
-        
-        if (input.equals("backspace")) correctness.removeCharacter();
-        else correctness.addCharacter(input.charAt(0));
+        else {
+            typingStatistics.addCharacter(input.charAt(0), correctness.addCharacter(input.charAt(0)));
+        }
     }
 
     private void gameTick() {
@@ -72,7 +83,10 @@ public class Controller {
     }
 
     private void switchView(Views view) {
-        throw new UnsupportedOperationException();
+        switch (view) {
+            case STATS -> stage.setScene(statView.getScene());
+            case TYPING -> stage.setScene(typingView.getScene());
+        }
     }
 
     public boolean isGameStarted() {
