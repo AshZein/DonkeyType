@@ -109,7 +109,7 @@ public class TypingView extends View implements Observer<PhraseState> {
         timeControls.setAlignment(Pos.CENTER);
 
         //The canvas
-        canvas = new Canvas(600, 200);
+        canvas = new Canvas(780, 200);
         canvas.setId("Canvas");
         gc = canvas.getGraphicsContext2D();
 
@@ -218,34 +218,30 @@ public class TypingView extends View implements Observer<PhraseState> {
             currInd = ind;
             // Only need to check if a word that comes after a space will go out of bounds.
             if(currChar == ' '){
-                currInd++;
-                char checkChar = phrase.charAt(currInd);
+                char checkChar = currChar;
                 Text check = new Text(Character.toString(checkChar));
                 check.setFont(promptFont);
-                currLineWidth = currX + (int) Math.ceil(check.getLayoutBounds().getWidth());
-
+                currLineWidth = currX + dx;
+                //System.out.println(currLineWidth);
                 while (true){ // a word ends when the last character is followed by a space.
                     // the line width must be less than the canvas width
-                    if(currLineWidth < canvas.getWidth()){
+                    if(currLineWidth > canvas.getWidth()){
+                        pass = true;
+                        break;
+                    }
+                    // the word will fall out of the canvas, so need to change x and y coordinates to the next line
+                    else{
                         currInd++;
                         if(currInd == phrase.length() || phrase.charAt(currInd) == ' '){
                             break;
                         }
                         checkChar = phrase.charAt(currInd);
                         check = new Text(Character.toString(checkChar));
+                        check.setFont(promptFont);
                         currLineWidth = currLineWidth + (int) Math.ceil(check.getLayoutBounds().getWidth());
-                    }
-                    // the word will fall out of the canvas, so need to change x and y coordinates to the next line
-                    else{
-                        currX = defCurrX;
-                        currY = currY + 45;
-                        this.cursorY = currY;
-                        pass = true;
-                        break;
                     }
                 }
             }
-
             //Setting the character colour.
             if(ind < cursor){
                 if (phraseBool[ind]){ // Text typed correctly
@@ -260,10 +256,17 @@ public class TypingView extends View implements Observer<PhraseState> {
             }
 
             //Drawing the current character
-            if(currY <= canvas.getHeight() && !pass) {
+            if(currY <= canvas.getHeight()) {
                 gc.fillText(Character.toString(currChar), currX, currY);
             }
             currX = currX + dx;
+            if(pass){
+                currX = defCurrX;
+                currY = currY + 45;
+                System.out.println(currY);
+                this.cursorY = currY;
+            }
+
             // Sets where to draw a visual cursor
             if (ind == cursor){
                 this.cursorX = currX-dx;
@@ -322,7 +325,7 @@ public class TypingView extends View implements Observer<PhraseState> {
     private void updateScreen() {
         if(!(this.state == null)){
             // Refreshing the canvas, to simplify drawing adn un-drawing elements.
-            canvas = new Canvas(600, 200);
+            canvas = new Canvas(780, 200);
             canvas.setId("Canvas");
             gc = canvas.getGraphicsContext2D();
             borderPane.setCenter(canvas);
