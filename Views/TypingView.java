@@ -22,7 +22,6 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class TypingView extends View implements Observer<PhraseState> {
     BorderPane borderPane;
@@ -71,19 +70,6 @@ public class TypingView extends View implements Observer<PhraseState> {
 
         borderPane = new BorderPane();
         borderPane.setStyle("-fx-background-color: " + UIColor + ";");
-
-        //Buttons
-//        startButton = new Button("Start Test");
-//        startButton.setId("Start Test");
-//        startButton.setPrefSize(100, 40);
-//        startButton.setFont(buttonFont);
-//        startButton.setStyle("-fx-background-color:" + buttonColorMain[0]+ "; -fx-text-fill: " + buttonColorMain[1]+ ";");
-//
-//        nextButton = new Button("Next Test");
-//        nextButton.setId("Next Test");
-//        nextButton.setPrefSize(100, 40);
-//        nextButton.setFont(new Font (12));
-//        nextButton.setStyle("-fx-background-color:" + buttonColorMain[0]+ "; -fx-text-fill: " +buttonColorMain[1]+ ";");
 
         //Time setting buttons
         timeLimButton = new HashMap<>();
