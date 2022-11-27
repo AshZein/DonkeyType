@@ -103,16 +103,13 @@ public class TypingView extends View implements Observer<PhraseState> {
         timeLimButton.put(fiveSecButton.getId(), fiveSecButton);
 
         // button spacing and positioning
-//        HBox mainControls = new HBox(40, startButton, nextButton);
-//        mainControls.setPadding(new Insets(20, 20, 20, 20));
-//        mainControls.setAlignment(Pos.CENTER);
 
         HBox timeControls = new HBox(40, fiveSecButton, fifteenSecButton, halfMinButton, fullMinButton);
         timeControls.setPadding(new Insets(20, 20, 20, 20));
         timeControls.setAlignment(Pos.CENTER);
 
         //The canvas
-        canvas = new Canvas(700, 200);
+        canvas = new Canvas(600, 200);
         canvas.setId("Canvas");
         gc = canvas.getGraphicsContext2D();
 
@@ -175,7 +172,6 @@ public class TypingView extends View implements Observer<PhraseState> {
 
         // Positioning of various UI elements
         borderPane.setCenter(canvas);
-//        borderPane.setBottom(mainControls);
         borderPane.setTop(timeControls);
 
         timeline = new Timeline(new KeyFrame(Duration.seconds(0.001), e->updateScreen()));
@@ -212,29 +208,27 @@ public class TypingView extends View implements Observer<PhraseState> {
         int currInd; // the current index of the word that will be pre-checked
         for(int ind = 0; ind < phrase.length(); ind++){
             currChar = phrase.charAt(ind);
-            currInd = ind;
 
             Text text = new Text(Character.toString(currChar));
             text.setFont(promptFont);
             int dx = (int) Math.ceil(text.getLayoutBounds().getWidth()); //the width of the text to be printed
 
             // pre-checking whether the next drawn WORD (not character) will go out of the bound for the canvas.
-            Text check;
-            char checkChar;
-            boolean pass = false;
+            boolean pass = false; // to skip drawing a space
+            currInd = ind;
             // Only need to check if a word that comes after a space will go out of bounds.
             if(currChar == ' '){
                 currInd++;
-                checkChar = phrase.charAt(currInd);
-                check = new Text(Character.toString(checkChar));
+                char checkChar = phrase.charAt(currInd);
+                Text check = new Text(Character.toString(checkChar));
                 check.setFont(promptFont);
                 currLineWidth = currX + (int) Math.ceil(check.getLayoutBounds().getWidth());
 
-                while (checkChar != ' '){ // a word ends when the last character is followed by a space.
+                while (true){ // a word ends when the last character is followed by a space.
                     // the line width must be less than the canvas width
                     if(currLineWidth < canvas.getWidth()){
                         currInd++;
-                        if(currInd == phrase.length()){
+                        if(currInd == phrase.length() || phrase.charAt(currInd) == ' '){
                             break;
                         }
                         checkChar = phrase.charAt(currInd);
@@ -265,8 +259,8 @@ public class TypingView extends View implements Observer<PhraseState> {
                 gc.setFill(textPallette[1]);
             }
 
+            //Drawing the current character
             if(currY <= canvas.getHeight() && !pass) {
-                //Drawing the current character
                 gc.fillText(Character.toString(currChar), currX, currY);
             }
             currX = currX + dx;
@@ -326,10 +320,9 @@ public class TypingView extends View implements Observer<PhraseState> {
      * Update the screen to show any changes caused by inputs.
      */
     private void updateScreen() {
-        System.out.println(control.getTimeLeft());
         if(!(this.state == null)){
             // Refreshing the canvas, to simplify drawing adn un-drawing elements.
-            canvas = new Canvas(700, 200);
+            canvas = new Canvas(600, 200);
             canvas.setId("Canvas");
             gc = canvas.getGraphicsContext2D();
             borderPane.setCenter(canvas);
