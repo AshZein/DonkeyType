@@ -40,19 +40,18 @@ public class Controller {
     public Controller(Stage stage) throws IOException {
         typingView = new TypingView(this);
         statView = new StatView(this);
-        typingStatistics = new TypingStatistics();
-        typingStatistics.register(statView);
-        scene = new Scene(typingView.getRoot(), 950, 650);
 
         promptGen = new PromptGenerator();
-        String tempPhrase = promptGen.getNextPrompt();
+        String initialPhrase = promptGen.getNextPrompt();
 
-        correctness = new PhraseCorrectness(tempPhrase);
+        correctness = new PhraseCorrectness(initialPhrase);
         correctness.register(typingView);
-        correctness.setPhrase(tempPhrase);  // Force call update
-        currentView = typingView;   // Default view
-        gameStarted = false;
+        correctness.setPhrase(initialPhrase);  // Force call update
 
+        typingStatistics = new TypingStatistics(initialPhrase);
+        typingStatistics.register(statView);
+
+        scene = new Scene(typingView.getRoot(), 950, 650);
         this.stage = stage;
         this.stage.setTitle("DonkeyType");
         this.stage.setScene(scene);
