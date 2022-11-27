@@ -1,5 +1,6 @@
 package Model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TypingStatistics implements Observable<PromptStatistics> {
@@ -11,6 +12,7 @@ public class TypingStatistics implements Observable<PromptStatistics> {
      */
     public TypingStatistics() {
         state = new PromptStatistics();
+        observers = new ArrayList<>();
     }
 
     /**
@@ -18,6 +20,7 @@ public class TypingStatistics implements Observable<PromptStatistics> {
      * @param phrase
      */
     public TypingStatistics(String phrase) {
+        observers = new ArrayList<>();
         state = new PromptStatistics(phrase);
     }
 
@@ -63,6 +66,13 @@ public class TypingStatistics implements Observable<PromptStatistics> {
     public void resetStatistics() {
         state.resetStatistics();
         notifyObservers();
+    }
+
+    /**
+     * Getter for PromptStatistics state
+     */
+    public PromptStatistics getState() {
+        return state;
     }
 
     /**

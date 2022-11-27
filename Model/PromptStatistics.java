@@ -1,21 +1,26 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 
 public class PromptStatistics {
     private int score;
+    private final ArrayList<Character> WORD_DELIMETERS = new ArrayList<>(Arrays.asList(' ', ',', '.', '?', '!', '/', '@', ';'));
     private ArrayList<String> mistypedWords;
     private ArrayList<String> totalWords;
     private int correctlyTypedCharacters;
     private double time;
     private String phrase;
+    private int cursorPos;
 
     /**
      * Constructor for PromptStatistics
      */
     PromptStatistics() {
         phrase = "";
+        cursorPos = 0;
         time = 0;
         correctlyTypedCharacters = 0;
         totalWords = new ArrayList<>();
@@ -28,7 +33,7 @@ public class PromptStatistics {
      */
     PromptStatistics(String phrase) {
         this();
-        this.phrase = phrase;
+        setPhrase(phrase);
     }
 
     /**
@@ -37,13 +42,42 @@ public class PromptStatistics {
      * @param correct
      */
     void addCharacter(char c, boolean correct) {
-        throw new UnsupportedOperationException();
+        // check if input is valid (fail silently)
+        if (cursorPos >= phrase.length()) return;
+
+        // update score
+        if (correct) {
+            correctlyTypedCharacters++;
+            score += 2;
+        } else {
+            score--;
+            // get current word
+
+            if (!WORD_DELIMETERS.contains(phrase.charAt(cursorPos))) {
+                // update mistypedWord
+                int i = cursorPos;
+                while (!(i == 0 || WORD_DELIMETERS.contains(phrase.charAt(i)))) {
+                    i--;
+                }
+                int j = cursorPos;
+                while (j < phrase.length() && !WORD_DELIMETERS.contains(phrase.charAt(j))) {
+                    j++;
+                }
+                mistypedWords.add(phrase.substring(i, j));
+            }
+        }
+
+
+        cursorPos++;
+
     }
 
     /**
      * Removes the last typed character;
      */
-    void removeCharacter() {throw new UnsupportedOperationException();}
+    void removeCharacter() {
+        if (cursorPos > 0) cursorPos--;
+    }
 
     /**
      * Reset the statistics state
@@ -62,6 +96,7 @@ public class PromptStatistics {
      */
     void setPhrase(String phrase) {
         this.phrase = phrase;
+        this.totalWords.addAll(Arrays.asList(phrase.split("\\W+")));
     }
 
     /**
@@ -94,7 +129,7 @@ public class PromptStatistics {
      * @return totalWords
      */
     public ArrayList<String> getTotalWords() {
-        return mistypedWords;
+        return totalWords;
     }
 
     /**
