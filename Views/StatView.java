@@ -19,11 +19,9 @@ import javafx.scene.control.Label;
 
 public class StatView extends View implements Observer<PromptStatistics> {
 
-    BorderPane borderPane;
-
     PromptStatistics promptStatistics;
     Button aButton;
-    PhraseState stage;
+    PhraseState state;
     String[] buttonColor0 = {"#121212", "#ffffff"};
     private int defaultFontSize = 36;
     private String defaultFontStyle = "Arial";
@@ -39,6 +37,7 @@ public class StatView extends View implements Observer<PromptStatistics> {
     @Override
     public void update(PromptStatistics state) {
         promptStatistics = state;
+        initUI();
     }
 
     private void initUI() {
@@ -47,8 +46,8 @@ public class StatView extends View implements Observer<PromptStatistics> {
         // default font size and style
         font = new Font(defaultFontStyle, defaultFontSize);
 
-        borderPane = new BorderPane();
-        borderPane.setStyle("-fx-background-color: " + UIColor + ";");
+        root = new BorderPane();
+        root.setStyle("-fx-background-color: " + UIColor + ";");
 
         // Button Not sure what the purpose is yet.
         aButton = new Button("Button");
@@ -60,9 +59,8 @@ public class StatView extends View implements Observer<PromptStatistics> {
         HBox controls = new HBox(40, aButton);
         controls.setPadding(new Insets(20, 20, 20, 20));
         controls.setAlignment(Pos.CENTER);
-        borderPane.setCenter(canvas);
-        borderPane.setBottom(controls);
-        scene = new Scene(borderPane, 950, 650);
+        root.setCenter(canvas);
+        root.setBottom(controls);
         canvas = new Canvas(800, 400);
         canvas.setId("Canvas");
         gc = canvas.getGraphicsContext2D();
@@ -71,19 +69,19 @@ public class StatView extends View implements Observer<PromptStatistics> {
         Label title = new Label("Statistics of typing");
         title.setFont(Font.font(defaultFontStyle));
         title.setId("title");
-        borderPane.setTop(title);
+        root.setTop(title);
 
         // Label to show word per minute. The number will be  replaced by data from PromptStatistics
         Label labelforwpm = new Label("Word per minute: " + promptStatistics.calculateWPM());
         labelforwpm.setFont(Font.font(defaultFontStyle));
         labelforwpm.setId("word per minute");
-        borderPane.setCenter(labelforwpm);
+        root.setCenter(labelforwpm);
 
         // Label to show Accuracy. The number will be  replaced by data from PromptStatistics
         Label labelforaccuracy = new Label("Accuracy: " + promptStatistics.calculateAccuracy() + "%");
         labelforaccuracy.setFont(Font.font(defaultFontStyle));
         labelforaccuracy.setId("word per minute");
-        borderPane.setLeft(labelforaccuracy);
+        root.setLeft(labelforaccuracy);
 
         // listview to show the list of mistyped words
         ListView<String> mistypedwords = new ListView<String>();
@@ -94,7 +92,7 @@ public class StatView extends View implements Observer<PromptStatistics> {
         items.addAll(promptStatistics.getMistypedWords());
         mistypedwords.setItems(items);
         mistypedwords.setPrefSize(300, 100);
-        borderPane.setRight(mistypedwords);
+        root.setRight(mistypedwords);
     }
 }
 

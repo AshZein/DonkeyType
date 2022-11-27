@@ -24,7 +24,6 @@ import javafx.util.Duration;
 import java.util.HashMap;
 
 public class TypingView extends View implements Observer<PhraseState> {
-    BorderPane borderPane;
     HashMap<String, Button> timeLimButton;
     String[] buttonColorMain = {"#121212", "#ffffff"}; // buttonColor set for main buttons, {Button fill colour, button text colour}
     String[] buttonColorTime = {"#121212", "#ffffff", "#00ff00", "#000000"}; //buttonColor set for time set buttons, {Button fill colour, button text colour, selected fill colour, selected text}
@@ -66,8 +65,7 @@ public class TypingView extends View implements Observer<PhraseState> {
         buttonFont = new Font(12);
         timerFont = new Font(50);
 
-        borderPane = new BorderPane();
-        borderPane.setStyle("-fx-background-color: " + UIColor + ";");
+        root.setStyle("-fx-background-color: " + UIColor + ";");
 
         //Time setting buttons
         timeLimButton = new HashMap<>();
@@ -149,7 +147,7 @@ public class TypingView extends View implements Observer<PhraseState> {
         });
 
         //The event handler for keyboard events
-        borderPane.setOnKeyReleased(new EventHandler<KeyEvent>() {
+        root.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
                 String code = keyEvent.getText();
@@ -163,21 +161,19 @@ public class TypingView extends View implements Observer<PhraseState> {
                     control.handleKeystroke(keyEvent.getText());
                 }
 
-                borderPane.requestFocus();
+                root.requestFocus();
             }
         });
 
 
         // Positioning of various UI elements
-        borderPane.setCenter(canvas);
+        root.setCenter(canvas);
 //        borderPane.setBottom(mainControls);
-        borderPane.setTop(timeControls);
+        root.setTop(timeControls);
 
         timeline = new Timeline(new KeyFrame(Duration.seconds(0.001), e->updateScreen()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
-
-        scene = new Scene(borderPane, 950, 650);
     }
 
     /*
@@ -326,7 +322,7 @@ public class TypingView extends View implements Observer<PhraseState> {
             canvas = new Canvas(700, 200);
             canvas.setId("Canvas");
             gc = canvas.getGraphicsContext2D();
-            borderPane.setCenter(canvas);
+            root.setCenter(canvas);
 
             this.drawTimer();
             this.drawScreen();

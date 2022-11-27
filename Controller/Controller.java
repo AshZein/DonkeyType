@@ -5,6 +5,7 @@ import Model.TypingStatistics;
 import Views.TypingView;
 import Views.View;
 import Views.StatView;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 import PromptGenerator.PromptGenerator;
 
@@ -23,6 +24,7 @@ enum Views {
 
 public class Controller {
     Stage stage;
+    Scene scene;
     View currentView;
     View otherView;
     TypingView typingView;
@@ -40,6 +42,7 @@ public class Controller {
         statView = new StatView(this);
         typingStatistics = new TypingStatistics();
         typingStatistics.register(statView);
+        scene = new Scene(typingView.getRoot(), 950, 650);
 
         promptGen = new PromptGenerator();
         String tempPhrase = promptGen.getNextPrompt();
@@ -52,7 +55,7 @@ public class Controller {
 
         this.stage = stage;
         this.stage.setTitle("DonkeyType");
-        this.stage.setScene(currentView.getScene());
+        this.stage.setScene(scene);
         this.stage.show();
     }
 
@@ -101,8 +104,8 @@ public class Controller {
 
     private void switchView(Views view) {
         switch (view) {
-            case STATS -> stage.setScene(statView.getScene());
-            case TYPING -> stage.setScene(typingView.getScene());
+            case STATS -> scene.setRoot(statView.getRoot());
+            case TYPING -> scene.setRoot(typingView.getRoot());
         }
     }
 
