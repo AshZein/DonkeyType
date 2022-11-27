@@ -6,6 +6,8 @@ import Views.View;
 import javafx.stage.Stage;
 import PromptGenerator.PromptGenerator;
 
+import java.io.IOException;
+
 enum Theme {
     NORMAL,
     HIGH_CONTRAST,
@@ -28,9 +30,8 @@ public class Controller {
     public double timeLimit = 0;
     PromptGenerator promptGen;
 
-    public Controller(Stage stage) {
+    public Controller(Stage stage) throws IOException {
         typingView = new TypingView(this);
-        //String tempPhrase = "The quick brown fox jumps over the lazy dog The quick brown fox jumps over the lazy dog The quick brown fox jumps over the lazy dog";
 
         promptGen = new PromptGenerator();
         String tempPhrase = promptGen.getNextPrompt();
