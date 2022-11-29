@@ -298,7 +298,7 @@ public class TypingView extends View implements Observer<PhraseState> {
      */
     private void drawCursor(){
         gc.setFill(cursorCol);
-        gc.fillRect(this.cursorX, this.cursorY - this.promptFont.getSize()+5, 2, this.promptFont.getSize()-2);
+        gc.fillRect(this.cursorX, this.cursorY - this.promptFont.getSize()+7, 2, this.promptFont.getSize()-2);
     }
 
     /*
@@ -320,6 +320,19 @@ public class TypingView extends View implements Observer<PhraseState> {
 
     }
 
+    private void drawWarningGuide(){
+        gc.setFont(timerFont);
+        gc.setTextAlign(TextAlignment.CENTER);
+        gc.setFill(textPallette[0]);
+        if(control.timeLimit == 0){
+            gc.fillText("Please select a time limit above", canvas.getWidth()/2, 40);
+        }
+        else if(!control.isGameStarted()){
+            gc.fillText("Start typing to begin", canvas.getWidth()/2,40);
+        }
+    }
+
+
     /*
      * Update the screen to show any changes caused by inputs.
      */
@@ -331,8 +344,11 @@ public class TypingView extends View implements Observer<PhraseState> {
             gc = canvas.getGraphicsContext2D();
             root.setCenter(canvas);
 
+            this.drawWarningGuide();
             this.drawTimer();
-            this.drawScreen();
+            if(control.timeLimit != 0) {
+                this.drawScreen();
+            }
         }
     }
 }
