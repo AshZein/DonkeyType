@@ -82,6 +82,12 @@ public class Controller {
         timeLimit = 0;
     }
 
+    public void nextTest(){
+        this.updatePrompt();
+        typingView.swapTimeButtonColour("reset");
+        switchView(Views.TYPING);
+    }
+
     public void handleKeystroke(String input) {
 //        if (!gameStarted) startTest() {
 //            if (timeLimit == 0) endTest() {

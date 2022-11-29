@@ -50,8 +50,8 @@ public class StatView extends View implements Observer<PromptStatistics> {
         root.setStyle("-fx-background-color: " + UIColor + ";");
 
         // Button Not sure what the purpose is yet.
-        aButton = new Button("Button");
-        aButton.setId("Button");
+        aButton = new Button("Next");
+        aButton.setId("Next");
         aButton.setPrefSize(100, 40);
         aButton.setFont(new Font(12));
         aButton.setStyle("-fx-background-color:" + buttonColor0[0] + "; -fx-text-fill: " + buttonColor0[1] + ";");
@@ -64,6 +64,10 @@ public class StatView extends View implements Observer<PromptStatistics> {
         canvas = new Canvas(800, 400);
         canvas.setId("Canvas");
         gc = canvas.getGraphicsContext2D();
+
+        aButton.setOnAction(e -> {
+            this.control.nextTest();
+        });
 
         // title
         Label title = new Label("Statistics of typing");

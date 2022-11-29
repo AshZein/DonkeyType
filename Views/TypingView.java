@@ -22,6 +22,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class TypingView extends View implements Observer<PhraseState> {
     HashMap<String, Button> timeLimButton;
@@ -275,6 +276,12 @@ public class TypingView extends View implements Observer<PhraseState> {
      * be a unique colour, while the other buttons should be a colour not equal to the selected button.
      */
     public void swapTimeButtonColour(String id){
+        if (Objects.equals(id, "reset")){
+            for(String i: timeLimButton.keySet()){
+                timeLimButton.get(i).setStyle("-fx-background-color:" + buttonColorTime[0] + "; -fx-text-fill: " + buttonColorTime[1] + ";");
+            }
+        }
+
         for(String i: timeLimButton.keySet()){
             Button b = timeLimButton.get(i);
             if (i != id){ //id is for unselected button
