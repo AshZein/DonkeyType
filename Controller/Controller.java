@@ -27,7 +27,7 @@ enum Views {
 }
 
 public class Controller {
-    Stage stage;
+    public Stage stage;
     Scene scene;
     View currentView;
     View otherView;
@@ -40,8 +40,10 @@ public class Controller {
     PromptGenerator promptGen;
     TypingStatistics typingStatistics;
 
+    // Strategy attributes
     Context cont;
     private HashMap<String, Strategy> strategies;
+    private int[] stratData = {0,0};
 
 
     public Controller(Stage stage) throws IOException {
@@ -51,6 +53,7 @@ public class Controller {
         promptGen = new PromptGenerator();
 
         cont = new Context();
+        strategies = new HashMap<>();
         strategies.put("normal", new NormalStrategy());
         strategies.put("quote", new QuoteStrategy());
 
@@ -149,6 +152,24 @@ public class Controller {
             this.endTest();
         }
         return timeLeft;
+    }
+
+    /*
+     * Update the prompt type to either normal random words or full quotes.
+     */
+    public void updateStrategy(String strategy){
+        if (strategy == "normal"){
+            this.cont.setStrategy(strategies.get(strategy));
+        }
+        else if(strategy == "quote"){
+            this.cont.setStrategy(strategies.get(strategy));
+        }
+    }
+    /*
+     * Update the data used by strategies to fetch prompts with correct modifications
+     */
+    public void updateStrategyData(int[] data){
+        this.stratData = data;
     }
 }
 
