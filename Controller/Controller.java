@@ -8,6 +8,7 @@ import Model.TypingStatistics;
 import Views.TypingView;
 import Views.View;
 import Views.StatView;
+import Views.SpecView;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import PromptGenerator.PromptGenerator;
@@ -33,6 +34,7 @@ public class Controller {
     View otherView;
     TypingView typingView;
     StatView statView;
+    SpecView specView;
     PhraseCorrectness correctness;
     private boolean gameStarted;
     private long gameStartTime;
@@ -49,6 +51,7 @@ public class Controller {
     public Controller(Stage stage) throws IOException {
         typingView = new TypingView(this);
         statView = new StatView(this);
+        specView = new SpecView(this, typingView);
 
         promptGen = new PromptGenerator();
 
@@ -173,6 +176,10 @@ public class Controller {
     public void updateStrategyData(int[] data){
         this.stratData = data;
         updatePrompt();
+    }
+
+    public void showSpecView(){
+        specView.show();
     }
 }
 
