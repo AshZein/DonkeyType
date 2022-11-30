@@ -16,10 +16,11 @@ public class SpecView {
 
     CheckBox normalCheck;
     CheckBox quoteCheck;
+    final Stage dialog;
 
     public SpecView(Controller control, TypingView typingView){
 
-        final Stage dialog = new Stage();
+        dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(control.stage);
         VBox dialogVBox = new VBox(30);
@@ -30,6 +31,7 @@ public class SpecView {
         normalCheck = new CheckBox("Normal");
         normalCheck.setFont(typingView.buttonFont);
         normalCheck.setStyle(typingView.buttonColorTime[0]);
+        normalCheck.setSelected(true);
 
         quoteCheck = new CheckBox("Quote");
         quoteCheck.setFont(typingView.buttonFont);
@@ -76,7 +78,6 @@ public class SpecView {
 
         Scene dialogScene = new Scene(dialogVBox, 450, 200);
         dialog.setScene(dialogScene);
-        dialog.show();
     }
     private int[] getData(){
         int[] data = {0,0};
@@ -87,5 +88,11 @@ public class SpecView {
             data[1] = 1;
         }
         return data;
+    }
+    /*
+     * show the specView dialog box
+     */
+    public void show(){
+        dialog.show();
     }
 }
