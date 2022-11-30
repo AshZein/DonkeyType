@@ -18,12 +18,16 @@ public class SpecView {
     CheckBox quoteCheck;
     final Stage dialog;
 
+    VBox dialogVBox;
+    HBox typeBox;
+    HBox specBox;
+
     public SpecView(Controller control, TypingView typingView){
 
         dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(control.stage);
-        VBox dialogVBox = new VBox(30);
+        dialogVBox = new VBox(30);
         dialogVBox.setPadding(new Insets(30, 20, 20, 20));
         dialogVBox.setStyle(typingView.UIColor);
 
@@ -51,11 +55,13 @@ public class SpecView {
         //prompt type checkbox handlers
         quoteCheck.setOnAction(e -> {
             control.updateStrategy("quote");
+            hideButtons("Numbers");
             normalCheck.setSelected(false);
         });
 
         normalCheck.setOnAction(e -> {
             control.updateStrategy("normal");
+            showButtons("Numbers");
             quoteCheck.setSelected(false);
         });
 
@@ -68,10 +74,12 @@ public class SpecView {
             control.updateStrategyData(getData());
         });
 
-        HBox specBox = new HBox(20, punctCheck, numCheck);
+        specBox = new HBox(20, punctCheck, numCheck);
         specBox.setAlignment(Pos.CENTER);
-        HBox typeBox = new HBox(40, normalCheck, quoteCheck);
+
+        typeBox = new HBox(40, normalCheck, quoteCheck);
         typeBox.setAlignment(Pos.CENTER);
+
         dialogVBox.setAlignment(Pos.TOP_CENTER);
         dialogVBox.getChildren().add(typeBox);
         dialogVBox.getChildren().add(specBox);
@@ -88,6 +96,17 @@ public class SpecView {
             data[1] = 1;
         }
         return data;
+    }
+
+    public void hideButtons(String button){
+        if(button == "Numbers") {
+            specBox.getChildren().remove(numCheck);
+        }
+    }
+    public void showButtons(String button){
+        if(button == "Numbers"){
+            specBox.getChildren().add(numCheck);
+        }
     }
     /*
      * show the specView dialog box
