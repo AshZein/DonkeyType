@@ -9,10 +9,8 @@ import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -93,23 +91,36 @@ public class TypingView extends View implements Observer<PhraseState> {
         timeLimButton.put(fifteenSecButton.getId(), fifteenSecButton);
 
         Button fiveSecButton = new Button("5s");
-        fiveSecButton .setId("5s");
-        fiveSecButton .setPrefSize(100,40);
-        fiveSecButton .setFont(buttonFont);
-        fiveSecButton .setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
+        fiveSecButton.setId("5s");
+        fiveSecButton.setPrefSize(100,40);
+        fiveSecButton.setFont(buttonFont);
+        fiveSecButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
         timeLimButton.put(fiveSecButton.getId(), fiveSecButton);
 
-        // button spacing and positioning
+        //Prompt specification Button
+        Button specButton = new Button("Test Options");
+        specButton.setId("Test Options");
+        specButton.setPrefSize(100,40);
+        specButton.setFont(buttonFont);
+        specButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
 
+        // button spacing and positioning
         HBox timeControls = new HBox(40, fiveSecButton, fifteenSecButton, halfMinButton, fullMinButton);
         timeControls.setPadding(new Insets(20, 20, 20, 20));
         timeControls.setAlignment(Pos.CENTER);
+
+        HBox specControls = new HBox(40, specButton);
+        specControls.setPadding(new Insets(20, 20, 20, 20));
+        specControls.setAlignment(Pos.CENTER);
 
         //The canvas
         canvas = new Canvas(700, 200);
         canvas.setId("Canvas");
         gc = canvas.getGraphicsContext2D();
 
+
+        // Prompt Specification button handling
+        specButton.setOnAction(e -> { SpecView specView = new SpecView(control, this); });
 
         // Handling the time limit setting buttons
         halfMinButton.setOnAction(e -> {
@@ -169,8 +180,8 @@ public class TypingView extends View implements Observer<PhraseState> {
 
         // Positioning of various UI elements
         root.setCenter(canvas);
-//        borderPane.setBottom(mainControls);
         root.setTop(timeControls);
+        root.setBottom(specControls);
 
         timeline = new Timeline(new KeyFrame(Duration.seconds(0.001), e->updateScreen()));
         timeline.setCycleCount(Timeline.INDEFINITE);
