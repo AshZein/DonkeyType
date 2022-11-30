@@ -89,8 +89,6 @@ public class Controller {
     }
 
     public void handleKeystroke(String input) {
-//        if (!gameStarted) startTest() {
-//            if (timeLimit == 0) endTest() {
         if(timeLimit != 0){
             if(gameStartTime == 0){
                 this.startTest();
