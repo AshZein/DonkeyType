@@ -1,7 +1,5 @@
 package Controller.Strategy;
 
-import PromptGenerator.NumberDecorator;
-import PromptGenerator.SymbolDecorator;
 import PromptGenerator.PQuotePromptGenerator;
 import PromptGenerator.NPQuotePromptGenerator;
 
