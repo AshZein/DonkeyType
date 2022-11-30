@@ -1,5 +1,8 @@
 package Controller;
 
+import Controller.Strategy.NormalStrategy;
+import Controller.Strategy.QuoteStrategy;
+import Controller.Strategy.Strategy;
 import Model.PhraseCorrectness;
 import Model.TypingStatistics;
 import Views.TypingView;
@@ -10,6 +13,7 @@ import javafx.stage.Stage;
 import PromptGenerator.PromptGenerator;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 enum Theme {
     NORMAL,
@@ -36,12 +40,20 @@ public class Controller {
     PromptGenerator promptGen;
     TypingStatistics typingStatistics;
 
+    Context cont;
+    private HashMap<String, Strategy> strategies;
+
 
     public Controller(Stage stage) throws IOException {
         typingView = new TypingView(this);
         statView = new StatView(this);
 
         promptGen = new PromptGenerator();
+
+        cont = new Context();
+        strategies.put("normal", new NormalStrategy());
+        strategies.put("quote", new QuoteStrategy());
+
         String initialPhrase = promptGen.getNextPrompt();
 
         correctness = new PhraseCorrectness(initialPhrase);
