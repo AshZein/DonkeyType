@@ -56,8 +56,9 @@ public class Controller {
         strategies = new HashMap<>();
         strategies.put("normal", new NormalStrategy());
         strategies.put("quote", new QuoteStrategy());
+        cont.setStrategy(strategies.get("normal"));
 
-        String initialPhrase = promptGen.getNextPrompt();
+        String initialPhrase = cont.executeStrategy(stratData);
 
         correctness = new PhraseCorrectness(initialPhrase);
         correctness.register(typingView);
@@ -133,7 +134,7 @@ public class Controller {
     }
 
     public void updatePrompt(){
-        String phrase = promptGen.getNextPrompt();
+        String phrase = cont.executeStrategy(stratData);
         correctness.setPhrase(phrase);
         typingStatistics.changePhrase(phrase);
     }
@@ -164,12 +165,14 @@ public class Controller {
         else if(strategy == "quote"){
             this.cont.setStrategy(strategies.get(strategy));
         }
+        updatePrompt();
     }
     /*
      * Update the data used by strategies to fetch prompts with correct modifications
      */
     public void updateStrategyData(int[] data){
         this.stratData = data;
+        updatePrompt();
     }
 }
 
