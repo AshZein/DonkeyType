@@ -120,7 +120,7 @@ public class TypingView extends View implements Observer<PhraseState> {
 
 
         // Prompt Specification button handling
-        specButton.setOnAction(e -> { SpecView specView = new SpecView(control, this); });
+        specButton.setOnAction(e -> { control.showSpecView(); });
 
         // Handling the time limit setting buttons
         halfMinButton.setOnAction(e -> {
