@@ -54,15 +54,25 @@ public class SpecView {
 
         //prompt type checkbox handlers
         quoteCheck.setOnAction(e -> {
-            control.updateStrategy("quote");
+            if(!quoteCheck.isSelected()){
+                quoteCheck.setSelected(true);
+            }
+            else{
+                control.updateStrategy("quote");
+                normalCheck.setSelected(false);
+            }
             hideButtons("Numbers");
-            normalCheck.setSelected(false);
         });
 
         normalCheck.setOnAction(e -> {
-            control.updateStrategy("normal");
+            if(!normalCheck.isSelected()){
+                normalCheck.setSelected(true);
+            }
+            else{
+                control.updateStrategy("normal");
+                quoteCheck.setSelected(false);
+            }
             showButtons("Numbers");
-            quoteCheck.setSelected(false);
         });
 
         // prompt modifier check box handlers
