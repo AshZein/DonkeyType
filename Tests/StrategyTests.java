@@ -30,6 +30,7 @@ public class StrategyTests {
             }
             phrase = cont.executeStrategy(new int[] {1,0});
         }
+        assertTrue(contains);
     }
 
     @Test
@@ -52,6 +53,7 @@ public class StrategyTests {
             }
             phrase = cont.executeStrategy(new int[] {0,1});
         }
+        assertTrue(contains);
     }
 
     @Test
