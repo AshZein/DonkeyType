@@ -6,6 +6,8 @@ import Views.TypingView;
 import Views.View;
 import Views.StatView;
 import javafx.scene.Scene;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import PromptGenerator.PromptGenerator;
 
@@ -28,6 +30,8 @@ public class Controller {
     TypingView typingView;
     StatView statView;
     PhraseCorrectness correctness;
+    MediaPlayer correctSoundPlayer;
+    MediaPlayer incorrectSoundPlayer;
     private boolean gameStarted;
     private long gameStartTime;
     public double timeLimit = 0;
@@ -38,6 +42,8 @@ public class Controller {
     public Controller(Stage stage) throws IOException {
         typingView = new TypingView(this);
         statView = new StatView(this);
+        correctSoundPlayer = new MediaPlayer(new Media("Assets/correct.mp3"));
+        incorrectSoundPlayer = new MediaPlayer(new Media("Assets/error.mp3"));
 
         promptGen = new PromptGenerator();
         String initialPhrase = promptGen.getNextPrompt();
@@ -95,7 +101,10 @@ public class Controller {
                 correctness.removeCharacter();
                 typingStatistics.removeCharacter();
             } else {
-                typingStatistics.addCharacter(input.charAt(0), correctness.addCharacter(input.charAt(0)));
+                boolean correct = correctness.addCharacter(input.charAt(0));
+                typingStatistics.addCharacter(input.charAt(0), correct);
+                if (correct) correctSoundPlayer.play();
+                else incorrectSoundPlayer.play();
             }
         }
     }
