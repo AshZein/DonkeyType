@@ -3,15 +3,17 @@ package Controller;
 import Model.PhraseCorrectness;
 import Model.TypingStatistics;
 import Views.TypingView;
-import Views.View;
 import Views.StatView;
 import javafx.scene.Scene;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import PromptGenerator.PromptGenerator;
+import javafx.util.Duration;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 enum Theme {
     NORMAL,
@@ -42,8 +44,8 @@ public class Controller {
     public Controller(Stage stage) throws IOException {
         typingView = new TypingView(this);
         statView = new StatView(this);
-        correctSoundPlayer = new MediaPlayer(new Media("Assets/correct.mp3"));
-        incorrectSoundPlayer = new MediaPlayer(new Media("Assets/error.mp3"));
+        correctSoundPlayer = new MediaPlayer(new Media(new File("./Assets/correct.mp3").toURI().toString()));
+        incorrectSoundPlayer = new MediaPlayer(new Media(new File("./Assets/error.mp3").toURI().toString()));
 
         promptGen = new PromptGenerator();
         String initialPhrase = promptGen.getNextPrompt();
@@ -103,8 +105,11 @@ public class Controller {
             } else {
                 boolean correct = correctness.addCharacter(input.charAt(0));
                 typingStatistics.addCharacter(input.charAt(0), correct);
-                if (correct) correctSoundPlayer.play();
-                else incorrectSoundPlayer.play();
+                correctSoundPlayer.stop();
+                incorrectSoundPlayer.stop();
+                if (!correct) {
+                    incorrectSoundPlayer.play();
+                }
             }
         }
     }
@@ -125,6 +130,12 @@ public class Controller {
     }
 
     public void updatePrompt(){
+        ArrayList<String> mistyped = typingStatistics.getState().getMistypedWords();
+        if (mistyped.size() == 0 || !mistyped.get(mistyped.size() - 1).equals(correctness.getPhraseState().getPhrase())) {
+            // typed correctly
+            correctSoundPlayer.stop();
+            correctSoundPlayer.play();
+        }
         String phrase = promptGen.getNextPrompt();
         correctness.setPhrase(phrase);
         typingStatistics.changePhrase(phrase);
