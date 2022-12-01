@@ -25,8 +25,6 @@ enum Views {
 public class Controller {
     Stage stage;
     Scene scene;
-    View currentView;
-    View otherView;
     TypingView typingView;
     StatView statView;
     PhraseCorrectness correctness;
