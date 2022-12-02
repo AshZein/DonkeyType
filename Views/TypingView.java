@@ -148,6 +148,12 @@ public class TypingView extends View implements Observer<PhraseState> {
         });
 
         //The event handler for keyboard events
+        HashMap<String, String> symbolMaps = new HashMap<>();
+        String[] symbols = {"!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "{", "}", ":", "?"};
+        String[] symbolsKeys = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "[", "]", ";", "/"};
+        for (int i = 0; i< symbols.length; i++){
+            symbolMaps.put(symbolsKeys[i], symbols[i]);
+        }
         root.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
@@ -156,8 +162,12 @@ public class TypingView extends View implements Observer<PhraseState> {
                     control.handleKeystroke("backspace");
 
                 } else if (keyEvent.isShiftDown()) { //Shift is pressed
-                    control.handleKeystroke(keyEvent.getText().toUpperCase());
-
+                    if(symbolMaps.containsKey(code)){
+                        control.handleKeystroke(symbolMaps.get(code));
+                    }
+                    else {
+                        control.handleKeystroke(keyEvent.getText().toUpperCase());
+                    }
                 } else if (code.length() == 1) { // every other single character key
                     control.handleKeystroke(keyEvent.getText());
                 }
