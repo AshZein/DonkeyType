@@ -14,6 +14,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.control.Button;
@@ -99,11 +100,30 @@ public class TypingView extends View implements Observer<PhraseState> {
         fiveSecButton .setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
         timeLimButton.put(fiveSecButton.getId(), fiveSecButton);
 
-        // button spacing and positioning
+        // timing button spacing and positioning
 
         HBox timeControls = new HBox(40, fiveSecButton, fifteenSecButton, halfMinButton, fullMinButton);
         timeControls.setPadding(new Insets(20, 20, 20, 20));
         timeControls.setAlignment(Pos.CENTER);
+
+        // Font setting button
+        // TODO: something about for loops later on where timeLimButton is used? i dunno
+        Button increaseFontButton = new Button("Increase Font");
+        increaseFontButton.setId("Increase Font");
+        increaseFontButton.setPrefSize(100,40);
+        increaseFontButton.setFont(buttonFont);
+        increaseFontButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
+
+        Button decreaseFontButton = new Button("Decrease Font");
+        decreaseFontButton.setId("Decrease Font");
+        decreaseFontButton.setPrefSize(100,40);
+        decreaseFontButton.setFont(buttonFont);
+        decreaseFontButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
+
+        // font buttons spacing and positioning
+        VBox fontControls = new VBox(10, increaseFontButton, decreaseFontButton);
+        fontControls.setPadding(new Insets(20, 20, 20, 20));
+        fontControls.setAlignment(Pos.TOP_LEFT);
 
         //The canvas
         canvas = new Canvas(700, 200);
@@ -147,6 +167,35 @@ public class TypingView extends View implements Observer<PhraseState> {
             }
         });
 
+        // Handling font setting
+
+        increaseFontButton.setOnAction(e -> {
+            //Changing the colour for the selected button and deselected button
+            //swapTimeButtonColour(fifteenSecButton.getId());
+            // TODO: scale canvas
+            // TODO: have the buttons light up when you click them
+            // TODO: non jank method of changing font
+            // TODO: non jank method of positioning buttons
+            // TODO: proper positioning for the increase/decrease buttons
+            // TODO: better button object? one that lets you select the number/see the number while you do it
+            // TODO: can use program with only a keyboard
+            defaultFontSize++;
+
+            promptFont = new Font(defaultFontStyle, defaultFontSize);
+            buttonFont = new Font(buttonFont.getSize() + 1);
+            timerFont = new Font(timerFont.getSize() + 1);
+
+        });
+
+        decreaseFontButton.setOnAction(e -> {
+            //Changing the colour for the selected button and deselected button
+            //swapTimeButtonColour(fifteenSecButton.getId());
+            defaultFontSize--;
+            promptFont = new Font(defaultFontStyle, defaultFontSize);
+            buttonFont = new Font(buttonFont.getSize() - 1);
+            timerFont = new Font(timerFont.getSize() - 1);
+
+        });
         //The event handler for keyboard events
         root.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
@@ -171,6 +220,10 @@ public class TypingView extends View implements Observer<PhraseState> {
         root.setCenter(canvas);
 //        borderPane.setBottom(mainControls);
         root.setTop(timeControls);
+
+        // TODO: position fontControls
+        //root.setTop(fontControls);
+        root.setLeft(fontControls);
 
         timeline = new Timeline(new KeyFrame(Duration.seconds(0.001), e->updateScreen()));
         timeline.setCycleCount(Timeline.INDEFINITE);
