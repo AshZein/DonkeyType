@@ -106,7 +106,7 @@ public class AccessibilityView {
         dialogVBox.getChildren().add(audioChimeHeading);
         dialogVBox.getChildren().add(toggleAudioButton);
 
-        Scene dialogScene = new Scene(dialogVBox, 500, 500);
+        Scene dialogScene = new Scene(dialogVBox, 500, 300);
         dialog.setScene(dialogScene);
     }
 
