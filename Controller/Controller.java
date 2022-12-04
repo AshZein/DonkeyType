@@ -98,6 +98,7 @@ public class Controller {
     public void setFont(int f) {
         typingView.changeFont(f);
         statView.changeFont(f);
+        accessView.changeFont(f);
     }
 
     public void toggleAudio() {
