@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -17,14 +18,16 @@ public class SpecView {
     CheckBox normalCheck;
     CheckBox quoteCheck;
     final Stage dialog;
+    HBox typeBox;
+    HBox specBox;
 
     public SpecView(Controller control, TypingView typingView){
 
         dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(control.stage);
-        VBox dialogVBox = new VBox(30);
-        dialogVBox.setPadding(new Insets(30, 20, 20, 20));
+        VBox dialogVBox = new VBox(10);
+        dialogVBox.setPadding(new Insets(30, 10, 10, 10));
         dialogVBox.setStyle(typingView.UIColor);
 
         // prompt type check boxes
@@ -49,6 +52,7 @@ public class SpecView {
         numCheck.setSelected(false);
 
         //prompt type checkbox handlers
+//prompt type checkbox handlers
         quoteCheck.setOnAction(e -> {
             if(!quoteCheck.isSelected()){
                 quoteCheck.setSelected(true);
@@ -57,6 +61,7 @@ public class SpecView {
                 control.updateStrategy("quote");
                 normalCheck.setSelected(false);
             }
+            hideButtons("Numbers");
         });
 
         normalCheck.setOnAction(e -> {
@@ -67,6 +72,7 @@ public class SpecView {
                 control.updateStrategy("normal");
                 quoteCheck.setSelected(false);
             }
+            showButtons("Numbers");
         });
 
         // prompt modifier check box handlers
@@ -78,12 +84,18 @@ public class SpecView {
             control.updateStrategyData(getData());
         });
 
-        HBox specBox = new HBox(20, punctCheck, numCheck);
-        specBox.setAlignment(Pos.CENTER);
-        HBox typeBox = new HBox(40, normalCheck, quoteCheck);
-        typeBox.setAlignment(Pos.CENTER);
-        dialogVBox.setAlignment(Pos.TOP_CENTER);
+        specBox = new HBox(20, punctCheck, numCheck);
+        specBox.setAlignment(Pos.TOP_LEFT);
+
+        typeBox = new HBox(40, normalCheck, quoteCheck);
+        typeBox.setAlignment(Pos.TOP_LEFT);
+
+        dialogVBox.setAlignment(Pos.TOP_LEFT);
+
+        dialogVBox.getChildren().add(new Text("Type:"));
         dialogVBox.getChildren().add(typeBox);
+
+        dialogVBox.getChildren().add(new Text("Modifiers:"));
         dialogVBox.getChildren().add(specBox);
 
         Scene dialogScene = new Scene(dialogVBox, 450, 200);
@@ -98,6 +110,17 @@ public class SpecView {
             data[1] = 1;
         }
         return data;
+    }
+
+    public void hideButtons(String button){
+        if(button == "Numbers") {
+            specBox.getChildren().remove(numCheck);
+        }
+    }
+    public void showButtons(String button){
+        if(button == "Numbers"){
+            specBox.getChildren().add(numCheck);
+        }
     }
     /*
      * show the specView dialog box
