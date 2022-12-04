@@ -128,7 +128,7 @@ public class StatView extends View implements Observer<PromptStatistics> {
                 b.setPrefSize(b.getWidth() + 5*n,b.getHeight() + n);
                 b.setFont(font);
             }
-
+//
             mistypedwords.setPrefSize(mistypedwords.getWidth() + 5*n, mistypedwords.getHeight() + n);
         }
     }
