@@ -27,6 +27,8 @@ import java.util.Objects;
 
 public class TypingView extends View implements Observer<PhraseState> {
     HashMap<String, Button> timeLimButton;
+    HashMap<String, Button> fontControlButton;
+
     String[] buttonColorMain = {"#121212", "#ffffff"}; // buttonColor set for main buttons, {Button fill colour, button text colour}
     String[] buttonColorTime = {"#121212", "#ffffff", "#00ff00", "#000000"}; //buttonColor set for time set buttons, {Button fill colour, button text colour, selected fill colour, selected text}
 
@@ -45,8 +47,8 @@ public class TypingView extends View implements Observer<PhraseState> {
     private int defaultFontSize = 36;
     private String defaultFontStyle = "Arial";
 
-    private int defCurrX = 0;
-    private int defCurrY = 90;
+    private int defCurrX = 40;
+    private int defCurrY = 170;
 
     // Visual Cursor stuff
     private int cursorX = 0;
@@ -71,6 +73,9 @@ public class TypingView extends View implements Observer<PhraseState> {
 
         //Time setting buttons
         timeLimButton = new HashMap<>();
+
+        // Font control buttons
+        fontControlButton = new HashMap<>();
 
         Button fullMinButton = new Button("60s");
         fullMinButton.setId("60s");
@@ -108,17 +113,19 @@ public class TypingView extends View implements Observer<PhraseState> {
 
         // Font setting button
         // TODO: something about for loops later on where timeLimButton is used? i dunno
-        Button increaseFontButton = new Button("Increase Font");
-        increaseFontButton.setId("Increase Font");
-        increaseFontButton.setPrefSize(100,40);
+        Button increaseFontButton = new Button("Increase");
+        increaseFontButton.setId("Increase");
+        increaseFontButton.setPrefSize(100,50);
         increaseFontButton.setFont(buttonFont);
         increaseFontButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
+        fontControlButton.put(increaseFontButton.getId(), increaseFontButton);
 
-        Button decreaseFontButton = new Button("Decrease Font");
-        decreaseFontButton.setId("Decrease Font");
-        decreaseFontButton.setPrefSize(100,40);
+        Button decreaseFontButton = new Button("Decrease");
+        decreaseFontButton.setId("Decrease");
+        decreaseFontButton.setPrefSize(100,50);
         decreaseFontButton.setFont(buttonFont);
         decreaseFontButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
+        fontControlButton.put(decreaseFontButton.getId(), decreaseFontButton);
 
         // font buttons spacing and positioning
         VBox fontControls = new VBox(10, increaseFontButton, decreaseFontButton);
@@ -126,7 +133,7 @@ public class TypingView extends View implements Observer<PhraseState> {
         fontControls.setAlignment(Pos.TOP_LEFT);
 
         //The canvas
-        canvas = new Canvas(700, 200);
+        canvas = new Canvas(1000, 350);
         canvas.setId("Canvas");
         gc = canvas.getGraphicsContext2D();
 
@@ -172,29 +179,14 @@ public class TypingView extends View implements Observer<PhraseState> {
         increaseFontButton.setOnAction(e -> {
             //Changing the colour for the selected button and deselected button
             //swapTimeButtonColour(fifteenSecButton.getId());
-            // TODO: scale canvas
-            // TODO: have the buttons light up when you click them
+            // TODO: dialog box for font increment buttons
             // TODO: non jank method of changing font
-            // TODO: non jank method of positioning buttons
-            // TODO: proper positioning for the increase/decrease buttons
-            // TODO: better button object? one that lets you select the number/see the number while you do it
             // TODO: can use program with only a keyboard
-            defaultFontSize++;
-
-            promptFont = new Font(defaultFontStyle, defaultFontSize);
-            buttonFont = new Font(buttonFont.getSize() + 1);
-            timerFont = new Font(timerFont.getSize() + 1);
-
+            control.setFont(1);
         });
 
         decreaseFontButton.setOnAction(e -> {
-            //Changing the colour for the selected button and deselected button
-            //swapTimeButtonColour(fifteenSecButton.getId());
-            defaultFontSize--;
-            promptFont = new Font(defaultFontStyle, defaultFontSize);
-            buttonFont = new Font(buttonFont.getSize() - 1);
-            timerFont = new Font(timerFont.getSize() - 1);
-
+            control.setFont(-1);
         });
         //The event handler for keyboard events
         root.setOnKeyReleased(new EventHandler<KeyEvent>() {
@@ -218,11 +210,7 @@ public class TypingView extends View implements Observer<PhraseState> {
 
         // Positioning of various UI elements
         root.setCenter(canvas);
-//        borderPane.setBottom(mainControls);
         root.setTop(timeControls);
-
-        // TODO: position fontControls
-        //root.setTop(fontControls);
         root.setLeft(fontControls);
 
         timeline = new Timeline(new KeyFrame(Duration.seconds(0.001), e->updateScreen()));
@@ -252,6 +240,7 @@ public class TypingView extends View implements Observer<PhraseState> {
         String phrase = this.state.getPhrase();
         boolean[] phraseBool = this.state.getCorrectness();
         int cursor = this.state.getCursorPos();
+
 
         int currLineWidth; // the width of the current line of text
         int currInd; // the current index of the word that will be pre-checked
@@ -365,9 +354,9 @@ public class TypingView extends View implements Observer<PhraseState> {
         Integer time = (int)control.getTimeLeft();
         if(control.isGameStarted()) { // prevent timer from being shown before user selects a limit
             if (time > 0) {
-                gc.fillText(time.toString(), canvas.getWidth() / 2, 40);
+                gc.fillText(time.toString(), canvas.getWidth() / 2, 50);
             } else { // timer goes into negatives
-                gc.fillText("0", canvas.getWidth() / 2, 40);
+                gc.fillText("0", canvas.getWidth() / 2, 50);
             }
         }
 
@@ -378,10 +367,10 @@ public class TypingView extends View implements Observer<PhraseState> {
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setFill(textPallette[0]);
         if(control.timeLimit == 0){
-            gc.fillText("Please select a time limit above", canvas.getWidth()/2, 40);
+            gc.fillText("Please select a time limit above", canvas.getWidth()/2 - 30, canvas.getHeight()/3 );
         }
         else if(!control.isGameStarted()){
-            gc.fillText("Start typing to begin", canvas.getWidth()/2,40);
+            gc.fillText("Start typing to begin", canvas.getWidth()/2 - 30,  canvas.getHeight()/3 );
         }
     }
 
@@ -391,17 +380,36 @@ public class TypingView extends View implements Observer<PhraseState> {
      */
     private void updateScreen() {
         if(!(this.state == null)){
-            // Refreshing the canvas, to simplify drawing adn un-drawing elements.
-            canvas = new Canvas(700, 200);
-            canvas.setId("Canvas");
-            gc = canvas.getGraphicsContext2D();
-            root.setCenter(canvas);
+            // Refreshing the canvas
+            gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
             this.drawWarningGuide();
             this.drawTimer();
             if(control.timeLimit != 0) {
                 this.drawScreen();
             }
+        }
+    }
+
+    public void changeFont(int n){
+        if( (n == 1 && defaultFontSize < 47) || (n == -1 && defaultFontSize > 30)) {
+            defaultFontSize += n;
+            promptFont = new Font(defaultFontStyle, defaultFontSize);
+            buttonFont = new Font(buttonFont.getSize() + n);
+            timerFont = new Font(timerFont.getSize() + n);
+
+            for(String i: timeLimButton.keySet()){
+                Button b =timeLimButton.get(i);
+                b.setPrefSize(b.getWidth() + 5*n,b.getHeight() + n);
+                b.setFont(buttonFont);
+            }
+
+            for(String i: fontControlButton.keySet()){
+                Button b =fontControlButton.get(i);
+                b.setPrefSize(b.getWidth() + 5*n,b.getHeight() + n);
+                b.setFont(buttonFont);
+            }
+
         }
     }
 }
