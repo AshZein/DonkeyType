@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -17,8 +18,6 @@ public class SpecView {
     CheckBox normalCheck;
     CheckBox quoteCheck;
     final Stage dialog;
-
-    VBox dialogVBox;
     HBox typeBox;
     HBox specBox;
 
@@ -27,8 +26,8 @@ public class SpecView {
         dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(control.stage);
-        dialogVBox = new VBox(30);
-        dialogVBox.setPadding(new Insets(30, 20, 20, 20));
+        VBox dialogVBox = new VBox(10);
+        dialogVBox.setPadding(new Insets(30, 10, 10, 10));
         dialogVBox.setStyle(typingView.UIColor);
 
         // prompt type check boxes
@@ -53,6 +52,7 @@ public class SpecView {
         numCheck.setSelected(false);
 
         //prompt type checkbox handlers
+//prompt type checkbox handlers
         quoteCheck.setOnAction(e -> {
             if(!quoteCheck.isSelected()){
                 quoteCheck.setSelected(true);
@@ -85,13 +85,17 @@ public class SpecView {
         });
 
         specBox = new HBox(20, punctCheck, numCheck);
-        specBox.setAlignment(Pos.CENTER);
+        specBox.setAlignment(Pos.TOP_LEFT);
 
         typeBox = new HBox(40, normalCheck, quoteCheck);
-        typeBox.setAlignment(Pos.CENTER);
+        typeBox.setAlignment(Pos.TOP_LEFT);
 
-        dialogVBox.setAlignment(Pos.TOP_CENTER);
+        dialogVBox.setAlignment(Pos.TOP_LEFT);
+
+        dialogVBox.getChildren().add(new Text("Type:"));
         dialogVBox.getChildren().add(typeBox);
+
+        dialogVBox.getChildren().add(new Text("Modifiers:"));
         dialogVBox.getChildren().add(specBox);
 
         Scene dialogScene = new Scene(dialogVBox, 450, 200);
