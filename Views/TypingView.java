@@ -112,7 +112,6 @@ public class TypingView extends View implements Observer<PhraseState> {
         timeControls.setAlignment(Pos.CENTER);
 
         // Font setting button
-        // TODO: something about for loops later on where timeLimButton is used? i dunno
         Button increaseFontButton = new Button("Increase");
         increaseFontButton.setId("Increase");
         increaseFontButton.setPrefSize(100,50);
@@ -177,17 +176,13 @@ public class TypingView extends View implements Observer<PhraseState> {
         // Handling font setting
 
         increaseFontButton.setOnAction(e -> {
-            //Changing the colour for the selected button and deselected button
-            //swapTimeButtonColour(fifteenSecButton.getId());
-            // TODO: dialog box for font increment buttons
-            // TODO: non jank method of changing font
-            // TODO: can use program with only a keyboard
             control.setFont(1);
         });
 
         decreaseFontButton.setOnAction(e -> {
             control.setFont(-1);
         });
+
         //The event handler for keyboard events
         root.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
