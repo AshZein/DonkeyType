@@ -242,6 +242,7 @@ public class TypingView extends View implements Observer<PhraseState> {
                         }
                         checkChar = phrase.charAt(currInd);
                         check = new Text(Character.toString(checkChar));
+                        check.setFont(promptFont);
                         currLineWidth = currLineWidth + (int) Math.ceil(check.getLayoutBounds().getWidth());
                     }
                     // the word will fall out of the canvas, so need to change x and y coordinates to the next line
