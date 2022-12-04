@@ -35,6 +35,7 @@ public class Controller {
     MediaPlayer correctSoundPlayer;
     MediaPlayer incorrectSoundPlayer;
     private boolean gameStarted;
+    private boolean playAudio;
     private long gameStartTime;
     public double timeLimit = 0;
     PromptGenerator promptGen;
@@ -46,6 +47,7 @@ public class Controller {
         statView = new StatView(this);
         correctSoundPlayer = new MediaPlayer(new Media(new File("./Assets/correct.mp3").toURI().toString()));
         incorrectSoundPlayer = new MediaPlayer(new Media(new File("./Assets/error.mp3").toURI().toString()));
+        playAudio = true;
 
         promptGen = new PromptGenerator();
         String initialPhrase = promptGen.getNextPrompt();
@@ -71,6 +73,14 @@ public class Controller {
     public void setFont(int f) {
         typingView.changeFont(f);
         statView.changeFont(f);
+    }
+
+    public void toggleAudio() {
+        this.playAudio = !playAudio;
+    }
+
+    public boolean getAudio() {
+        return playAudio;
     }
 
     public void startTest() {
@@ -108,7 +118,7 @@ public class Controller {
                 typingStatistics.addCharacter(input.charAt(0), correct);
                 correctSoundPlayer.stop();
                 incorrectSoundPlayer.stop();
-                if (!correct) {
+                if (!correct && playAudio) {
                     incorrectSoundPlayer.play();
                 }
             }
@@ -132,7 +142,7 @@ public class Controller {
 
     public void updatePrompt(){
         ArrayList<String> mistyped = typingStatistics.getState().getMistypedWords();
-        if (mistyped.size() == 0 || !mistyped.get(mistyped.size() - 1).equals(correctness.getPhraseState().getPhrase())) {
+        if (mistyped.size() == 0 || !mistyped.get(mistyped.size() - 1).equals(correctness.getPhraseState().getPhrase()) && playAudio) {
             // typed correctly
             correctSoundPlayer.stop();
             correctSoundPlayer.play();

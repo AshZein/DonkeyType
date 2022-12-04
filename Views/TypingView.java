@@ -28,6 +28,7 @@ import java.util.Objects;
 public class TypingView extends View implements Observer<PhraseState> {
     HashMap<String, Button> timeLimButton;
     HashMap<String, Button> fontControlButton;
+    Button toggleAudioButton;
 
     String[] buttonColorMain = {"#121212", "#ffffff"}; // buttonColor set for main buttons, {Button fill colour, button text colour}
     String[] buttonColorTime = {"#121212", "#ffffff", "#00ff00", "#000000"}; //buttonColor set for time set buttons, {Button fill colour, button text colour, selected fill colour, selected text}
@@ -126,10 +127,18 @@ public class TypingView extends View implements Observer<PhraseState> {
         decreaseFontButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
         fontControlButton.put(decreaseFontButton.getId(), decreaseFontButton);
 
+        toggleAudioButton = new Button("Audio On");
+        toggleAudioButton.setId("toggleAudio");
+        toggleAudioButton.setPrefSize(100,50);
+        toggleAudioButton.setFont(buttonFont);
+        toggleAudioButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
+
         // font buttons spacing and positioning
-        VBox fontControls = new VBox(10, increaseFontButton, decreaseFontButton);
+        VBox fontControls = new VBox(10, increaseFontButton, decreaseFontButton, toggleAudioButton);
         fontControls.setPadding(new Insets(20, 20, 20, 20));
         fontControls.setAlignment(Pos.TOP_LEFT);
+
+
 
         //The canvas
         canvas = new Canvas(1000, 350);
@@ -181,6 +190,17 @@ public class TypingView extends View implements Observer<PhraseState> {
 
         decreaseFontButton.setOnAction(e -> {
             control.setFont(-1);
+        });
+
+        // Toggle audio chimes
+
+        toggleAudioButton.setOnAction(e -> {
+            control.toggleAudio();
+            if (control.getAudio()) {
+                toggleAudioButton.setText("Audio On");
+            } else {
+                toggleAudioButton.setText("Audio Off");
+            }
         });
 
         //The event handler for keyboard events
@@ -414,6 +434,8 @@ public class TypingView extends View implements Observer<PhraseState> {
                 b.setPrefSize(b.getWidth() + 5*n,b.getHeight() + n);
                 b.setFont(buttonFont);
             }
+            toggleAudioButton.setPrefSize(toggleAudioButton.getWidth() + 5 * n, toggleAudioButton.getHeight() + n);
+            toggleAudioButton.setFont(buttonFont);
 
         }
     }
