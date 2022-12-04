@@ -166,7 +166,7 @@ public class Controller {
         String phrase = cont.executeStrategy(stratData);
 
         ArrayList<String> mistyped = typingStatistics.getState().getMistypedWords();
-        if (mistyped.size() == 0 || !mistyped.get(mistyped.size() - 1).equals(correctness.getPhraseState().getPhrase()) && playAudio) {
+        if ((mistyped.size() == 0 || !mistyped.get(mistyped.size() - 1).equals(correctness.getPhraseState().getPhrase())) && playAudio) {
             // typed correctly
             correctSoundPlayer.stop();
             correctSoundPlayer.play();
