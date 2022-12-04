@@ -1,9 +1,13 @@
 package Controller;
 
+import Controller.Strategy.NormalStrategy;
+import Controller.Strategy.QuoteStrategy;
+import Controller.Strategy.Strategy;
 import Model.PhraseCorrectness;
 import Model.TypingStatistics;
 import Views.TypingView;
 import Views.StatView;
+import Views.SpecView;
 import javafx.scene.Scene;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -13,6 +17,7 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.ArrayList;
 
 enum Theme {
@@ -27,10 +32,11 @@ enum Views {
 }
 
 public class Controller {
-    Stage stage;
+    public Stage stage;
     Scene scene;
     TypingView typingView;
     StatView statView;
+    SpecView specView;
     PhraseCorrectness correctness;
     MediaPlayer correctSoundPlayer;
     MediaPlayer incorrectSoundPlayer;
@@ -41,16 +47,32 @@ public class Controller {
     PromptGenerator promptGen;
     TypingStatistics typingStatistics;
 
+    // Strategy attributes
+    Context cont;
+    private HashMap<String, Strategy> strategies;
+    private int[] stratData = {0,0};
+
 
     public Controller(Stage stage) throws IOException {
         typingView = new TypingView(this);
         statView = new StatView(this);
+
+        specView = new SpecView(this, typingView);
+
         correctSoundPlayer = new MediaPlayer(new Media(new File("./Assets/correct.mp3").toURI().toString()));
         incorrectSoundPlayer = new MediaPlayer(new Media(new File("./Assets/error.mp3").toURI().toString()));
         playAudio = true;
 
+
         promptGen = new PromptGenerator();
-        String initialPhrase = promptGen.getNextPrompt();
+
+        cont = new Context();
+        strategies = new HashMap<>();
+        strategies.put("normal", new NormalStrategy());
+        strategies.put("quote", new QuoteStrategy());
+        cont.setStrategy(strategies.get("normal"));
+
+        String initialPhrase = cont.executeStrategy(stratData);
 
         correctness = new PhraseCorrectness(initialPhrase);
         correctness.register(typingView);
@@ -141,13 +163,14 @@ public class Controller {
     }
 
     public void updatePrompt(){
+        String phrase = cont.executeStrategy(stratData);
+
         ArrayList<String> mistyped = typingStatistics.getState().getMistypedWords();
         if (mistyped.size() == 0 || !mistyped.get(mistyped.size() - 1).equals(correctness.getPhraseState().getPhrase()) && playAudio) {
             // typed correctly
             correctSoundPlayer.stop();
             correctSoundPlayer.play();
         }
-        String phrase = promptGen.getNextPrompt();
         correctness.setPhrase(phrase);
         typingStatistics.changePhrase(phrase);
     }
@@ -166,6 +189,30 @@ public class Controller {
             this.endTest();
         }
         return timeLeft;
+    }
+
+    /*
+     * Update the prompt type to either normal random words or full quotes.
+     */
+    public void updateStrategy(String strategy){
+        if (strategy == "normal"){
+            this.cont.setStrategy(strategies.get(strategy));
+        }
+        else if(strategy == "quote"){
+            this.cont.setStrategy(strategies.get(strategy));
+        }
+        updatePrompt();
+    }
+    /*
+     * Update the data used by strategies to fetch prompts with correct modifications
+     */
+    public void updateStrategyData(int[] data){
+        this.stratData = data;
+        updatePrompt();
+    }
+
+    public void showSpecView(){
+        specView.show();
     }
 }
 

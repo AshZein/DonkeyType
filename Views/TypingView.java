@@ -9,10 +9,8 @@ import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -100,17 +98,28 @@ public class TypingView extends View implements Observer<PhraseState> {
         timeLimButton.put(fifteenSecButton.getId(), fifteenSecButton);
 
         Button fiveSecButton = new Button("5s");
-        fiveSecButton .setId("5s");
-        fiveSecButton .setPrefSize(100,40);
-        fiveSecButton .setFont(buttonFont);
-        fiveSecButton .setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
+        fiveSecButton.setId("5s");
+        fiveSecButton.setPrefSize(100,40);
+        fiveSecButton.setFont(buttonFont);
+        fiveSecButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
         timeLimButton.put(fiveSecButton.getId(), fiveSecButton);
 
-        // timing button spacing and positioning
+        //Prompt specification Button
+        Button specButton = new Button("Test Options");
+        specButton.setId("Test Options");
+        specButton.setPrefSize(100,40);
+        specButton.setFont(buttonFont);
+        specButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
 
+        // button spacing and positioning
         HBox timeControls = new HBox(40, fiveSecButton, fifteenSecButton, halfMinButton, fullMinButton);
         timeControls.setPadding(new Insets(20, 20, 20, 20));
         timeControls.setAlignment(Pos.CENTER);
+
+
+        HBox specControls = new HBox(40, specButton);
+        specControls.setPadding(new Insets(20, 20, 20, 20));
+        specControls.setAlignment(Pos.CENTER);
 
         // Font setting button
         Button increaseFontButton = new Button("Increase");
@@ -138,13 +147,14 @@ public class TypingView extends View implements Observer<PhraseState> {
         fontControls.setPadding(new Insets(20, 20, 20, 20));
         fontControls.setAlignment(Pos.TOP_LEFT);
 
-
-
         //The canvas
         canvas = new Canvas(1000, 350);
         canvas.setId("Canvas");
         gc = canvas.getGraphicsContext2D();
 
+
+        // Prompt Specification button handling
+        specButton.setOnAction(e -> { control.showSpecView(); });
 
         // Handling the time limit setting buttons
         halfMinButton.setOnAction(e -> {
@@ -236,6 +246,7 @@ public class TypingView extends View implements Observer<PhraseState> {
         // Positioning of various UI elements
         root.setCenter(canvas);
         root.setTop(timeControls);
+        root.setBottom(specControls);
         root.setLeft(fontControls);
 
         timeline = new Timeline(new KeyFrame(Duration.seconds(0.001), e->updateScreen()));
