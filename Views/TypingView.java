@@ -12,6 +12,7 @@ import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.control.Button;
@@ -24,6 +25,9 @@ import java.util.Objects;
 
 public class TypingView extends View implements Observer<PhraseState> {
     HashMap<String, Button> timeLimButton;
+    HashMap<String, Button> fontControlButton;
+    Button toggleAudioButton;
+
     String[] buttonColorMain = {"#121212", "#ffffff"}; // buttonColor set for main buttons, {Button fill colour, button text colour}
     String[] buttonColorTime = {"#121212", "#ffffff", "#00ff00", "#000000"}; //buttonColor set for time set buttons, {Button fill colour, button text colour, selected fill colour, selected text}
 
@@ -42,8 +46,8 @@ public class TypingView extends View implements Observer<PhraseState> {
     private int defaultFontSize = 36;
     private String defaultFontStyle = "Arial";
 
-    private int defCurrX = 0;
-    private int defCurrY = 90;
+    private int defCurrX = 40;
+    private int defCurrY = 170;
 
     // Visual Cursor stuff
     private int cursorX = 0;
@@ -68,6 +72,9 @@ public class TypingView extends View implements Observer<PhraseState> {
 
         //Time setting buttons
         timeLimButton = new HashMap<>();
+
+        // Font control buttons
+        fontControlButton = new HashMap<>();
 
         Button fullMinButton = new Button("60s");
         fullMinButton.setId("60s");
@@ -109,12 +116,39 @@ public class TypingView extends View implements Observer<PhraseState> {
         timeControls.setPadding(new Insets(20, 20, 20, 20));
         timeControls.setAlignment(Pos.CENTER);
 
+
         HBox specControls = new HBox(40, specButton);
         specControls.setPadding(new Insets(20, 20, 20, 20));
         specControls.setAlignment(Pos.CENTER);
 
+        // Font setting button
+        Button increaseFontButton = new Button("Increase");
+        increaseFontButton.setId("Increase");
+        increaseFontButton.setPrefSize(100,50);
+        increaseFontButton.setFont(buttonFont);
+        increaseFontButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
+        fontControlButton.put(increaseFontButton.getId(), increaseFontButton);
+
+        Button decreaseFontButton = new Button("Decrease");
+        decreaseFontButton.setId("Decrease");
+        decreaseFontButton.setPrefSize(100,50);
+        decreaseFontButton.setFont(buttonFont);
+        decreaseFontButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
+        fontControlButton.put(decreaseFontButton.getId(), decreaseFontButton);
+
+        toggleAudioButton = new Button("Audio On");
+        toggleAudioButton.setId("toggleAudio");
+        toggleAudioButton.setPrefSize(100,50);
+        toggleAudioButton.setFont(buttonFont);
+        toggleAudioButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
+
+        // font buttons spacing and positioning
+        VBox fontControls = new VBox(10, increaseFontButton, decreaseFontButton, toggleAudioButton);
+        fontControls.setPadding(new Insets(20, 20, 20, 20));
+        fontControls.setAlignment(Pos.TOP_LEFT);
+
         //The canvas
-        canvas = new Canvas(700, 200);
+        canvas = new Canvas(1000, 350);
         canvas.setId("Canvas");
         gc = canvas.getGraphicsContext2D();
 
@@ -158,7 +192,34 @@ public class TypingView extends View implements Observer<PhraseState> {
             }
         });
 
+        // Handling font setting
+
+        increaseFontButton.setOnAction(e -> {
+            control.setFont(1);
+        });
+
+        decreaseFontButton.setOnAction(e -> {
+            control.setFont(-1);
+        });
+
+        // Toggle audio chimes
+
+        toggleAudioButton.setOnAction(e -> {
+            control.toggleAudio();
+            if (control.getAudio()) {
+                toggleAudioButton.setText("Audio On");
+            } else {
+                toggleAudioButton.setText("Audio Off");
+            }
+        });
+
         //The event handler for keyboard events
+        HashMap<String, String> symbolMaps = new HashMap<>();
+        String[] symbols = {"!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "{", "}", ":", "?"};
+        String[] symbolsKeys = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "[", "]", ";", "/"};
+        for (int i = 0; i< symbols.length; i++){
+            symbolMaps.put(symbolsKeys[i], symbols[i]);
+        }
         root.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
@@ -167,8 +228,12 @@ public class TypingView extends View implements Observer<PhraseState> {
                     control.handleKeystroke("backspace");
 
                 } else if (keyEvent.isShiftDown()) { //Shift is pressed
-                    control.handleKeystroke(keyEvent.getText().toUpperCase());
-
+                    if(symbolMaps.containsKey(code)){
+                        control.handleKeystroke(symbolMaps.get(code));
+                    }
+                    else {
+                        control.handleKeystroke(keyEvent.getText().toUpperCase());
+                    }
                 } else if (code.length() == 1) { // every other single character key
                     control.handleKeystroke(keyEvent.getText());
                 }
@@ -182,6 +247,7 @@ public class TypingView extends View implements Observer<PhraseState> {
         root.setCenter(canvas);
         root.setTop(timeControls);
         root.setBottom(specControls);
+        root.setLeft(fontControls);
 
         timeline = new Timeline(new KeyFrame(Duration.seconds(0.001), e->updateScreen()));
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -324,9 +390,9 @@ public class TypingView extends View implements Observer<PhraseState> {
         Integer time = (int)control.getTimeLeft();
         if(control.isGameStarted()) { // prevent timer from being shown before user selects a limit
             if (time > 0) {
-                gc.fillText(time.toString(), canvas.getWidth() / 2, 40);
+                gc.fillText(time.toString(), canvas.getWidth() / 2, 50);
             } else { // timer goes into negatives
-                gc.fillText("0", canvas.getWidth() / 2, 40);
+                gc.fillText("0", canvas.getWidth() / 2, 50);
             }
         }
 
@@ -337,10 +403,10 @@ public class TypingView extends View implements Observer<PhraseState> {
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setFill(textPallette[0]);
         if(control.timeLimit == 0){
-            gc.fillText("Please select a time limit above", canvas.getWidth()/2, 40);
+            gc.fillText("Please select a time limit above", canvas.getWidth()/2 - 30, canvas.getHeight()/3 );
         }
         else if(!control.isGameStarted()){
-            gc.fillText("Start typing to begin", canvas.getWidth()/2,40);
+            gc.fillText("Start typing to begin", canvas.getWidth()/2 - 30,  canvas.getHeight()/3 );
         }
     }
 
@@ -350,17 +416,38 @@ public class TypingView extends View implements Observer<PhraseState> {
      */
     private void updateScreen() {
         if(!(this.state == null)){
-            // Refreshing the canvas, to simplify drawing adn un-drawing elements.
-            canvas = new Canvas(700, 200);
-            canvas.setId("Canvas");
-            gc = canvas.getGraphicsContext2D();
-            root.setCenter(canvas);
+            // Refreshing the canvas
+            gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
             this.drawWarningGuide();
             this.drawTimer();
             if(control.timeLimit != 0) {
                 this.drawScreen();
             }
+        }
+    }
+
+    public void changeFont(int n){
+        if( (n == 1 && defaultFontSize < 47) || (n == -1 && defaultFontSize > 30)) {
+            defaultFontSize += n;
+            promptFont = new Font(defaultFontStyle, defaultFontSize);
+            buttonFont = new Font(buttonFont.getSize() + n);
+            timerFont = new Font(timerFont.getSize() + n);
+
+            for(String i: timeLimButton.keySet()){
+                Button b =timeLimButton.get(i);
+                b.setPrefSize(b.getWidth() + 5*n,b.getHeight() + n);
+                b.setFont(buttonFont);
+            }
+
+            for(String i: fontControlButton.keySet()){
+                Button b =fontControlButton.get(i);
+                b.setPrefSize(b.getWidth() + 5*n,b.getHeight() + n);
+                b.setFont(buttonFont);
+            }
+            toggleAudioButton.setPrefSize(toggleAudioButton.getWidth() + 5 * n, toggleAudioButton.getHeight() + n);
+            toggleAudioButton.setFont(buttonFont);
+
         }
     }
 }
