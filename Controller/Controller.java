@@ -57,7 +57,7 @@ public class Controller {
         typingStatistics = new TypingStatistics(initialPhrase);
         typingStatistics.register(statView);
 
-        scene = new Scene(typingView.getRoot(), 950, 650);
+        scene = new Scene(typingView.getRoot(), 1100, 650);
         this.stage = stage;
         this.stage.setTitle("DonkeyType");
         this.stage.setScene(scene);
@@ -68,8 +68,9 @@ public class Controller {
         throw new UnsupportedOperationException();
     }
 
-    public void setFont() {
-        throw new UnsupportedOperationException();
+    public void setFont(int f) {
+        typingView.changeFont(f);
+        statView.changeFont(f);
     }
 
     public void startTest() {
