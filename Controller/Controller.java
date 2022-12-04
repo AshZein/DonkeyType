@@ -8,6 +8,7 @@ import Model.TypingStatistics;
 import Views.TypingView;
 import Views.StatView;
 import Views.SpecView;
+import Views.AccessibilityView;
 import javafx.scene.Scene;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -37,6 +38,7 @@ public class Controller {
     TypingView typingView;
     StatView statView;
     SpecView specView;
+    AccessibilityView accessView;
     PhraseCorrectness correctness;
     MediaPlayer correctSoundPlayer;
     MediaPlayer incorrectSoundPlayer;
@@ -58,6 +60,7 @@ public class Controller {
         statView = new StatView(this);
 
         specView = new SpecView(this, typingView);
+        accessView = new AccessibilityView(this, typingView);
 
         correctSoundPlayer = new MediaPlayer(new Media(new File("./Assets/correct.mp3").toURI().toString()));
         incorrectSoundPlayer = new MediaPlayer(new Media(new File("./Assets/error.mp3").toURI().toString()));
@@ -214,5 +217,7 @@ public class Controller {
     public void showSpecView(){
         specView.show();
     }
+
+    public void showAccessView() { accessView.show(); }
 }
 
