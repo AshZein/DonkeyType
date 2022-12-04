@@ -3,13 +3,17 @@ package Controller;
 import Model.PhraseCorrectness;
 import Model.TypingStatistics;
 import Views.TypingView;
-import Views.View;
 import Views.StatView;
 import javafx.scene.Scene;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import PromptGenerator.PromptGenerator;
+import javafx.util.Duration;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 enum Theme {
     NORMAL,
@@ -25,12 +29,13 @@ enum Views {
 public class Controller {
     Stage stage;
     Scene scene;
-    View currentView;
-    View otherView;
     TypingView typingView;
     StatView statView;
     PhraseCorrectness correctness;
+    MediaPlayer correctSoundPlayer;
+    MediaPlayer incorrectSoundPlayer;
     private boolean gameStarted;
+    private boolean playAudio;
     private long gameStartTime;
     public double timeLimit = 0;
     PromptGenerator promptGen;
@@ -40,6 +45,9 @@ public class Controller {
     public Controller(Stage stage) throws IOException {
         typingView = new TypingView(this);
         statView = new StatView(this);
+        correctSoundPlayer = new MediaPlayer(new Media(new File("./Assets/correct.mp3").toURI().toString()));
+        incorrectSoundPlayer = new MediaPlayer(new Media(new File("./Assets/error.mp3").toURI().toString()));
+        playAudio = true;
 
         promptGen = new PromptGenerator();
         String initialPhrase = promptGen.getNextPrompt();
@@ -65,6 +73,14 @@ public class Controller {
     public void setFont(int f) {
         typingView.changeFont(f);
         statView.changeFont(f);
+    }
+
+    public void toggleAudio() {
+        this.playAudio = !playAudio;
+    }
+
+    public boolean getAudio() {
+        return playAudio;
     }
 
     public void startTest() {
@@ -98,7 +114,13 @@ public class Controller {
                 correctness.removeCharacter();
                 typingStatistics.removeCharacter();
             } else {
-                typingStatistics.addCharacter(input.charAt(0), correctness.addCharacter(input.charAt(0)));
+                boolean correct = correctness.addCharacter(input.charAt(0));
+                typingStatistics.addCharacter(input.charAt(0), correct);
+                correctSoundPlayer.stop();
+                incorrectSoundPlayer.stop();
+                if (!correct && playAudio) {
+                    incorrectSoundPlayer.play();
+                }
             }
         }
     }
@@ -119,6 +141,12 @@ public class Controller {
     }
 
     public void updatePrompt(){
+        ArrayList<String> mistyped = typingStatistics.getState().getMistypedWords();
+        if (mistyped.size() == 0 || !mistyped.get(mistyped.size() - 1).equals(correctness.getPhraseState().getPhrase()) && playAudio) {
+            // typed correctly
+            correctSoundPlayer.stop();
+            correctSoundPlayer.play();
+        }
         String phrase = promptGen.getNextPrompt();
         correctness.setPhrase(phrase);
         typingStatistics.changePhrase(phrase);
