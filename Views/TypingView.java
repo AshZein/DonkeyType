@@ -43,7 +43,7 @@ public class TypingView extends View implements Observer<PhraseState> {
 
 
     //The font size and style for the Drawn Text Prompts
-    private int defaultFontSize = 36;
+    int defaultFontSize = 36;
     private String defaultFontStyle = "Arial";
 
     private int defCurrX = 40;
