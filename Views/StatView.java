@@ -85,6 +85,7 @@ public class StatView extends View implements Observer<PromptStatistics> {
 
         // title
         Label title = new Label("Statistics of typing");
+        title.setStyle("-fx-text-fill: " + buttonColor0[1]+ ";");
         title.setFont(font);
         title.setId("title");
         root.setTop(title);
@@ -92,6 +93,7 @@ public class StatView extends View implements Observer<PromptStatistics> {
 
         // Label to show word per minute. The number will be  replaced by data from PromptStatistics
         Label labelforwpm = new Label("Word per minute: " + promptStatistics.calculateWPM());
+        labelforwpm.setStyle("-fx-text-fill: " + buttonColor0[1]+ ";");
         labelforwpm.setFont(font);
         labelforwpm.setId("word per minute");
         root.setCenter(labelforwpm);
@@ -99,6 +101,7 @@ public class StatView extends View implements Observer<PromptStatistics> {
 
         // Label to show Accuracy. The number will be  replaced by data from PromptStatistics
         Label labelforaccuracy = new Label("Accuracy: " + promptStatistics.calculateAccuracy() + "%");
+        labelforaccuracy.setStyle("-fx-text-fill: " + buttonColor0[1]+ ";");
         labelforaccuracy.setFont(font);
         labelforaccuracy.setId("word per minute");
         root.setLeft(labelforaccuracy);
@@ -107,12 +110,31 @@ public class StatView extends View implements Observer<PromptStatistics> {
         // listview to show the list of mistyped words
         mistypedwords.editableProperty().set(false);
         mistypedwords.setMouseTransparent(true);
+        mistypedwords.setStyle("-fx-background-color:" + buttonColor0[0]+ "; -fx-text-fill: " + buttonColor0[1]+ ";");
         // this will be populated by missed words from PromptStatistics
         ObservableList<String> items = FXCollections.observableArrayList("List of Mistyped Words:");
         items.addAll(promptStatistics.getMistypedWords());
         mistypedwords.setItems(items);
         mistypedwords.setPrefSize(300, 100);
         root.setRight(mistypedwords);
+    }
+    public void changeTheme(String theme) {
+
+        if (theme == "NORMAL"){
+            UIColor = "#a9a9a9";
+            buttonColor0 = new String[]{"#121212", "#ffffff"};
+            initUI();
+        }
+        if (theme == "HIGH_CONTRAST"){
+            UIColor = "#121212";
+            buttonColor0 = new String[]{"#00FFFF", "#ADFF2F"};
+            initUI();
+        }
+        if (theme == "DARK"){
+            UIColor = "#000000";
+            buttonColor0 = new String[]{"#808080", "#D3D3D3"};
+            initUI();
+        }
     }
 
     public void changeFont(int n){
@@ -128,7 +150,6 @@ public class StatView extends View implements Observer<PromptStatistics> {
                 b.setPrefSize(b.getWidth() + 5*n,b.getHeight() + n);
                 b.setFont(font);
             }
-//
             mistypedwords.setPrefSize(mistypedwords.getWidth() + 5*n, mistypedwords.getHeight() + n);
         }
     }

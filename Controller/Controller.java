@@ -11,12 +11,6 @@ import PromptGenerator.PromptGenerator;
 
 import java.io.IOException;
 
-enum Theme {
-    NORMAL,
-    HIGH_CONTRAST,
-    DARK,
-}
-
 enum Views {
     TYPING,
     STATS,
@@ -59,7 +53,21 @@ public class Controller {
     }
 
     public void setTheme(Theme theme) {
-        throw new UnsupportedOperationException();
+        switch (theme) {
+            case NORMAL -> {
+                typingView.changeTheme("Normal");
+                statView.changeTheme("Normal");
+            }
+            case DARK -> {
+                typingView.changeTheme("DARK");
+                statView.changeTheme("DARK");
+            }
+            case HIGH_CONTRAST -> {
+                typingView.changeTheme("HIGH_CONTRAST");
+                statView.changeTheme("HIGH_CONTRAST");
+            }
+        }
+
     }
 
     public void setFont(int f) {
@@ -139,5 +147,6 @@ public class Controller {
         }
         return timeLeft;
     }
+
 }
 

@@ -3,19 +3,22 @@ package Views;
 import Controller.Controller;
 import Model.Observer;
 import Model.PhraseState;
-
+import Controller.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
@@ -131,6 +134,19 @@ public class TypingView extends View implements Observer<PhraseState> {
         fontControls.setPadding(new Insets(20, 20, 20, 20));
         fontControls.setAlignment(Pos.TOP_LEFT);
 
+        // Theme changing choicebox
+        VBox vbox = new VBox();
+        vbox.setSpacing(10);
+        Text txt = new Text(" Select your theme: (before starting or selecting time)");
+        txt.setFill(Paint.valueOf(buttonColorTime[1]));
+        vbox.getChildren().add(txt);
+        ChoiceBox<String> themechoice = new ChoiceBox<>();
+        themechoice.setStyle("-fx-background-color:" + buttonColorTime[1]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
+        ObservableList<String> observableList = themechoice.getItems();
+        observableList.addAll("NORMAL", "HIGH_CONTRAST", "DARK");
+        vbox.getChildren().add(themechoice);
+        root.setBottom(vbox);
+
         //The canvas
         canvas = new Canvas(1000, 350);
         canvas.setId("Canvas");
@@ -181,6 +197,21 @@ public class TypingView extends View implements Observer<PhraseState> {
 
         decreaseFontButton.setOnAction(e -> {
             control.setFont(-1);
+        });
+
+        // Handling Changing theme
+        themechoice.setOnAction((event) -> {
+            String selectedItem = themechoice.getSelectionModel().getSelectedItem();
+            if (selectedItem == "Normal") {
+                control.setTheme(Theme.NORMAL);
+            }
+            if (selectedItem == "HIGH_CONTRAST") {
+                control.setTheme(Theme.HIGH_CONTRAST);
+            }
+            if (selectedItem == "DARK") {
+                control.setTheme(Theme.DARK);
+            }
+
         });
 
         //The event handler for keyboard events
@@ -395,6 +426,32 @@ public class TypingView extends View implements Observer<PhraseState> {
             }
         }
     }
+
+    public void changeTheme(String theme) {
+            if (theme == "NORMAL") {
+                UIColor = "#a9a9a9";
+                cursorCol = Color.GRAY;
+                buttonColorTime = new String[]{"#121212", "#ffffff", "#00ff00", "#000000"};
+                textPallette = new Color[]{Color.WHITE, Color.GRAY, Color.RED};
+                initUI();
+            }
+            if (theme == "HIGH_CONTRAST") {
+                UIColor = "#121212";
+                cursorCol = Color.RED;
+                // button color: black, button text color: white, selected button color: green, selected button text color: black
+                buttonColorTime = new String[]{"#00BFFF", "#ADFF2F", "#FF1493", "#ADFF2F"};
+                textPallette = new Color[]{Color.YELLOWGREEN, Color.GRAY, Color.RED};
+                initUI();
+            }
+            if (theme == "DARK") {
+                UIColor = "#000000";
+                cursorCol = Color.GRAY;
+                buttonColorTime = new String[]{"#808080", "#D3D3D3", "#D3D3D3", "#000000"};
+                textPallette = new Color[]{Color.WHITE, Color.GRAY, Color.RED};
+                initUI();
+            }
+        }
+
 
     public void changeFont(int n){
         if( (n == 1 && defaultFontSize < 47) || (n == -1 && defaultFontSize > 30)) {
