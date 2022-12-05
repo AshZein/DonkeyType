@@ -52,7 +52,6 @@ public class SpecView {
         numCheck.setSelected(false);
 
         //prompt type checkbox handlers
-//prompt type checkbox handlers
         quoteCheck.setOnAction(e -> {
             if(!quoteCheck.isSelected()){
                 quoteCheck.setSelected(true);

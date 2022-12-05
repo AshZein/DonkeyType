@@ -26,7 +26,7 @@ import java.util.Objects;
 public class TypingView extends View implements Observer<PhraseState> {
     HashMap<String, Button> timeLimButton;
     HashMap<String, Button> fontControlButton;
-    Button toggleAudioButton;
+    HashMap<String, Button> settingButtons;
 
     String[] buttonColorMain = {"#121212", "#ffffff"}; // buttonColor set for main buttons, {Button fill colour, button text colour}
     String[] buttonColorTime = {"#121212", "#ffffff", "#00ff00", "#000000"}; //buttonColor set for time set buttons, {Button fill colour, button text colour, selected fill colour, selected text}
@@ -43,7 +43,7 @@ public class TypingView extends View implements Observer<PhraseState> {
 
 
     //The font size and style for the Drawn Text Prompts
-    private int defaultFontSize = 36;
+    int defaultFontSize = 36;
     private String defaultFontStyle = "Arial";
 
     private int defCurrX = 40;
@@ -111,41 +111,22 @@ public class TypingView extends View implements Observer<PhraseState> {
         specButton.setFont(buttonFont);
         specButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
 
+        // accessibility window button
+        Button accessButton = new Button("Accessibility");
+        accessButton.setId("Accessibility");
+        accessButton.setPrefSize(100,40);
+        accessButton.setFont(buttonFont);
+        accessButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
+
         // button spacing and positioning
         HBox timeControls = new HBox(40, fiveSecButton, fifteenSecButton, halfMinButton, fullMinButton);
         timeControls.setPadding(new Insets(20, 20, 20, 20));
         timeControls.setAlignment(Pos.CENTER);
 
 
-        HBox specControls = new HBox(40, specButton);
+        HBox specControls = new HBox(40, specButton, accessButton);
         specControls.setPadding(new Insets(20, 20, 20, 20));
         specControls.setAlignment(Pos.CENTER);
-
-        // Font setting button
-        Button increaseFontButton = new Button("Increase");
-        increaseFontButton.setId("Increase");
-        increaseFontButton.setPrefSize(100,50);
-        increaseFontButton.setFont(buttonFont);
-        increaseFontButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
-        fontControlButton.put(increaseFontButton.getId(), increaseFontButton);
-
-        Button decreaseFontButton = new Button("Decrease");
-        decreaseFontButton.setId("Decrease");
-        decreaseFontButton.setPrefSize(100,50);
-        decreaseFontButton.setFont(buttonFont);
-        decreaseFontButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
-        fontControlButton.put(decreaseFontButton.getId(), decreaseFontButton);
-
-        toggleAudioButton = new Button("Audio On");
-        toggleAudioButton.setId("toggleAudio");
-        toggleAudioButton.setPrefSize(100,50);
-        toggleAudioButton.setFont(buttonFont);
-        toggleAudioButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
-
-        // font buttons spacing and positioning
-        VBox fontControls = new VBox(10, increaseFontButton, decreaseFontButton, toggleAudioButton);
-        fontControls.setPadding(new Insets(20, 20, 20, 20));
-        fontControls.setAlignment(Pos.TOP_LEFT);
 
         //The canvas
         canvas = new Canvas(1000, 350);
@@ -155,6 +136,14 @@ public class TypingView extends View implements Observer<PhraseState> {
 
         // Prompt Specification button handling
         specButton.setOnAction(e -> { control.showSpecView(); });
+
+        // Accessibility button handling
+        accessButton.setOnAction(e -> { control.showAccessView(); });
+
+        settingButtons = new HashMap<>();
+        settingButtons.put(accessButton.getId(), accessButton);
+        settingButtons.put(specButton.getId(), specButton);
+
 
         // Handling the time limit setting buttons
         halfMinButton.setOnAction(e -> {
@@ -192,27 +181,6 @@ public class TypingView extends View implements Observer<PhraseState> {
             }
         });
 
-        // Handling font setting
-
-        increaseFontButton.setOnAction(e -> {
-            control.setFont(1);
-        });
-
-        decreaseFontButton.setOnAction(e -> {
-            control.setFont(-1);
-        });
-
-        // Toggle audio chimes
-
-        toggleAudioButton.setOnAction(e -> {
-            control.toggleAudio();
-            if (control.getAudio()) {
-                toggleAudioButton.setText("Audio On");
-            } else {
-                toggleAudioButton.setText("Audio Off");
-            }
-        });
-
         //The event handler for keyboard events
         HashMap<String, String> symbolMaps = new HashMap<>();
         String[] symbols = {"!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "{", "}", ":", "?"};
@@ -247,7 +215,6 @@ public class TypingView extends View implements Observer<PhraseState> {
         root.setCenter(canvas);
         root.setTop(timeControls);
         root.setBottom(specControls);
-        root.setLeft(fontControls);
 
         timeline = new Timeline(new KeyFrame(Duration.seconds(0.001), e->updateScreen()));
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -439,15 +406,11 @@ public class TypingView extends View implements Observer<PhraseState> {
                 b.setPrefSize(b.getWidth() + 5*n,b.getHeight() + n);
                 b.setFont(buttonFont);
             }
-
-            for(String i: fontControlButton.keySet()){
-                Button b =fontControlButton.get(i);
+            for (String j: settingButtons.keySet()){
+                Button b = settingButtons.get(j);
                 b.setPrefSize(b.getWidth() + 5*n,b.getHeight() + n);
                 b.setFont(buttonFont);
             }
-            toggleAudioButton.setPrefSize(toggleAudioButton.getWidth() + 5 * n, toggleAudioButton.getHeight() + n);
-            toggleAudioButton.setFont(buttonFont);
-
         }
     }
 }
