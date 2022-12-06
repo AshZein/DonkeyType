@@ -142,8 +142,6 @@ public class TypingView extends View implements Observer<PhraseState> {
         specControls.setPadding(new Insets(20, 20, 20, 20));
         specControls.setAlignment(Pos.CENTER);
 
-//        root.setBottom(vbox);
-
         //The canvas
         canvas = new Canvas(1000, 350);
         canvas.setId("Canvas");
@@ -196,17 +194,6 @@ public class TypingView extends View implements Observer<PhraseState> {
                 control.setTimeLimit(15.0);
             }
         });
-
-
-        // Handling font setting
-
-//        increaseFontButton.setOnAction(e -> {
-//            control.setFont(1);
-//        });
-//
-//        decreaseFontButton.setOnAction(e -> {
-//            control.setFont(-1);
-//        });
 
         // Handling Changing theme
         themechoice.setOnAction((event) -> {
