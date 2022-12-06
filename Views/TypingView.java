@@ -447,7 +447,6 @@ public class TypingView extends View implements Observer<PhraseState> {
             if (theme == "HIGH_CONTRAST") {
                 UIColor = "#121212";
                 cursorCol = Color.RED;
-                // button color: black, button text color: white, selected button color: green, selected button text color: black
                 buttonColorTime = new String[]{"#00BFFF", "#ADFF2F", "#FF1493", "#ADFF2F"};
                 textPallette = new Color[]{Color.YELLOWGREEN, Color.GRAY, Color.RED};
                 initUI();
