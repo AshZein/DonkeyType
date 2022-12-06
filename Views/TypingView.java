@@ -10,11 +10,9 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -31,6 +29,7 @@ import java.util.Objects;
 public class TypingView extends View implements Observer<PhraseState> {
     HashMap<String, Button> timeLimButton;
     HashMap<String, Button> fontControlButton;
+    HashMap<String, Button> settingButtons;
 
     String[] buttonColorMain = {"#121212", "#ffffff"}; // buttonColor set for main buttons, {Button fill colour, button text colour}
     String[] buttonColorTime = {"#121212", "#ffffff", "#00ff00", "#000000"}; //buttonColor set for time set buttons, {Button fill colour, button text colour, selected fill colour, selected text}
@@ -47,7 +46,7 @@ public class TypingView extends View implements Observer<PhraseState> {
 
 
     //The font size and style for the Drawn Text Prompts
-    private int defaultFontSize = 36;
+    int defaultFontSize = 36;
     private String defaultFontStyle = "Arial";
 
     private int defCurrX = 40;
@@ -102,37 +101,35 @@ public class TypingView extends View implements Observer<PhraseState> {
         timeLimButton.put(fifteenSecButton.getId(), fifteenSecButton);
 
         Button fiveSecButton = new Button("5s");
-        fiveSecButton .setId("5s");
-        fiveSecButton .setPrefSize(100,40);
-        fiveSecButton .setFont(buttonFont);
-        fiveSecButton .setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
+        fiveSecButton.setId("5s");
+        fiveSecButton.setPrefSize(100,40);
+        fiveSecButton.setFont(buttonFont);
+        fiveSecButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
         timeLimButton.put(fiveSecButton.getId(), fiveSecButton);
 
-        // timing button spacing and positioning
+        //Prompt specification Button
+        Button specButton = new Button("Test Options");
+        specButton.setId("Test Options");
+        specButton.setPrefSize(100,40);
+        specButton.setFont(buttonFont);
+        specButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
 
+        // accessibility window button
+        Button accessButton = new Button("Accessibility");
+        accessButton.setId("Accessibility");
+        accessButton.setPrefSize(100,40);
+        accessButton.setFont(buttonFont);
+        accessButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
+
+        // button spacing and positioning
         HBox timeControls = new HBox(40, fiveSecButton, fifteenSecButton, halfMinButton, fullMinButton);
         timeControls.setPadding(new Insets(20, 20, 20, 20));
         timeControls.setAlignment(Pos.CENTER);
 
-        // Font setting button
-        Button increaseFontButton = new Button("Increase");
-        increaseFontButton.setId("Increase");
-        increaseFontButton.setPrefSize(100,50);
-        increaseFontButton.setFont(buttonFont);
-        increaseFontButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
-        fontControlButton.put(increaseFontButton.getId(), increaseFontButton);
 
-        Button decreaseFontButton = new Button("Decrease");
-        decreaseFontButton.setId("Decrease");
-        decreaseFontButton.setPrefSize(100,50);
-        decreaseFontButton.setFont(buttonFont);
-        decreaseFontButton.setStyle("-fx-background-color:" + buttonColorTime[0]+ "; -fx-text-fill: " + buttonColorTime[1]+ ";");
-        fontControlButton.put(decreaseFontButton.getId(), decreaseFontButton);
-
-        // font buttons spacing and positioning
-        VBox fontControls = new VBox(10, increaseFontButton, decreaseFontButton);
-        fontControls.setPadding(new Insets(20, 20, 20, 20));
-        fontControls.setAlignment(Pos.TOP_LEFT);
+        HBox specControls = new HBox(40, specButton, accessButton);
+        specControls.setPadding(new Insets(20, 20, 20, 20));
+        specControls.setAlignment(Pos.CENTER);
 
         // Theme changing choicebox
         VBox vbox = new VBox();
@@ -151,6 +148,17 @@ public class TypingView extends View implements Observer<PhraseState> {
         canvas = new Canvas(1000, 350);
         canvas.setId("Canvas");
         gc = canvas.getGraphicsContext2D();
+
+
+        // Prompt Specification button handling
+        specButton.setOnAction(e -> { control.showSpecView(); });
+
+        // Accessibility button handling
+        accessButton.setOnAction(e -> { control.showAccessView(); });
+
+        settingButtons = new HashMap<>();
+        settingButtons.put(accessButton.getId(), accessButton);
+        settingButtons.put(specButton.getId(), specButton);
 
 
         // Handling the time limit setting buttons
@@ -188,6 +196,7 @@ public class TypingView extends View implements Observer<PhraseState> {
                 control.setTimeLimit(15.0);
             }
         });
+
 
         // Handling font setting
 
@@ -247,7 +256,7 @@ public class TypingView extends View implements Observer<PhraseState> {
         // Positioning of various UI elements
         root.setCenter(canvas);
         root.setTop(timeControls);
-        root.setLeft(fontControls);
+        root.setBottom(specControls);
 
         timeline = new Timeline(new KeyFrame(Duration.seconds(0.001), e->updateScreen()));
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -465,13 +474,11 @@ public class TypingView extends View implements Observer<PhraseState> {
                 b.setPrefSize(b.getWidth() + 5*n,b.getHeight() + n);
                 b.setFont(buttonFont);
             }
-
-            for(String i: fontControlButton.keySet()){
-                Button b =fontControlButton.get(i);
+            for (String j: settingButtons.keySet()){
+                Button b = settingButtons.get(j);
                 b.setPrefSize(b.getWidth() + 5*n,b.getHeight() + n);
                 b.setFont(buttonFont);
             }
-
         }
     }
 }
