@@ -119,7 +119,6 @@ public class StatView extends View implements Observer<PromptStatistics> {
         root.setRight(mistypedwords);
     }
     public void changeTheme(String theme) {
-
         if (theme == "NORMAL"){
             UIColor = "#a9a9a9";
             buttonColor0 = new String[]{"#121212", "#ffffff"};
