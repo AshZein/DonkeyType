@@ -127,10 +127,6 @@ public class TypingView extends View implements Observer<PhraseState> {
         timeControls.setAlignment(Pos.CENTER);
 
 
-        HBox specControls = new HBox(40, specButton, accessButton);
-        specControls.setPadding(new Insets(20, 20, 20, 20));
-        specControls.setAlignment(Pos.CENTER);
-
         // Theme changing choicebox
         VBox vbox = new VBox();
         vbox.setSpacing(10);
@@ -142,7 +138,11 @@ public class TypingView extends View implements Observer<PhraseState> {
         ObservableList<String> observableList = themechoice.getItems();
         observableList.addAll("NORMAL", "HIGH_CONTRAST", "DARK");
         vbox.getChildren().add(themechoice);
-        root.setBottom(vbox);
+        HBox specControls = new HBox(40, specButton, accessButton,vbox);
+        specControls.setPadding(new Insets(20, 20, 20, 20));
+        specControls.setAlignment(Pos.CENTER);
+
+//        root.setBottom(vbox);
 
         //The canvas
         canvas = new Canvas(1000, 350);
@@ -200,13 +200,13 @@ public class TypingView extends View implements Observer<PhraseState> {
 
         // Handling font setting
 
-        increaseFontButton.setOnAction(e -> {
-            control.setFont(1);
-        });
-
-        decreaseFontButton.setOnAction(e -> {
-            control.setFont(-1);
-        });
+//        increaseFontButton.setOnAction(e -> {
+//            control.setFont(1);
+//        });
+//
+//        decreaseFontButton.setOnAction(e -> {
+//            control.setFont(-1);
+//        });
 
         // Handling Changing theme
         themechoice.setOnAction((event) -> {
