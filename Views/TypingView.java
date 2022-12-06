@@ -202,7 +202,7 @@ public class TypingView extends View implements Observer<PhraseState> {
         // Handling Changing theme
         themechoice.setOnAction((event) -> {
             String selectedItem = themechoice.getSelectionModel().getSelectedItem();
-            if (selectedItem == "Normal") {
+            if (selectedItem == "NORMAL") {
                 control.setTheme(Theme.NORMAL);
             }
             if (selectedItem == "HIGH_CONTRAST") {

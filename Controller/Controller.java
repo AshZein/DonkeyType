@@ -55,8 +55,8 @@ public class Controller {
     public void setTheme(Theme theme) {
         switch (theme) {
             case NORMAL -> {
-                typingView.changeTheme("Normal");
-                statView.changeTheme("Normal");
+                typingView.changeTheme("NORMAL");
+                statView.changeTheme("NORMAL");
             }
             case DARK -> {
                 typingView.changeTheme("DARK");
@@ -67,7 +67,6 @@ public class Controller {
                 statView.changeTheme("HIGH_CONTRAST");
             }
         }
-
     }
 
     public void setFont(int f) {
