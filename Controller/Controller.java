@@ -21,12 +21,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.ArrayList;
 
-enum Theme {
-    NORMAL,
-    HIGH_CONTRAST,
-    DARK,
-}
-
 enum Views {
     TYPING,
     STATS,
@@ -92,7 +86,20 @@ public class Controller {
     }
 
     public void setTheme(Theme theme) {
-        throw new UnsupportedOperationException();
+        switch (theme) {
+            case NORMAL -> {
+                typingView.changeTheme("NORMAL");
+                statView.changeTheme("NORMAL");
+            }
+            case DARK -> {
+                typingView.changeTheme("DARK");
+                statView.changeTheme("DARK");
+            }
+            case HIGH_CONTRAST -> {
+                typingView.changeTheme("HIGH_CONTRAST");
+                statView.changeTheme("HIGH_CONTRAST");
+            }
+        }
     }
 
     public void setFont(int f) {
@@ -195,6 +202,7 @@ public class Controller {
         return timeLeft;
     }
 
+
     /*
      * Update the prompt type to either normal random words or full quotes.
      */
@@ -220,5 +228,6 @@ public class Controller {
     }
 
     public void showAccessView() { accessView.show(); }
+
 }
 
